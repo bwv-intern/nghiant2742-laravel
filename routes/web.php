@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Models\User;
@@ -58,3 +59,10 @@ Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('prod
 
 // Post
 Route::get('/posts', [PostController::class, 'index']);
+
+
+Route::get('/client', [HomeController::class, 'index']);
+
+Route::get('/server', [HomeController::class, 'index2']);
+
+Route::post('/handle', [HomeController::class, 'handle']);
