@@ -15,12 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function(){
-    return "Welcome";
-});
+    return view('index');
+})->name('home');
 
 Route::get('/client', [HomeController::class, 'index']);
 
 Route::get('/server', [HomeController::class, 'index2']);
 
 Route::post('/handle', [HomeController::class, 'handle']);
+
+Route::get('/126148', [HomeController::class, 'index3']);
+
+Route::post('/confirmSubmit', [HomeController::class, 'handleBack']);
+
 
