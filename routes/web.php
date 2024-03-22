@@ -45,6 +45,10 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // Product
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 
+Route::post('/product/import', [ProductController::class, 'import'])->name('import');
+
+Route::get('/product/export', [ProductController::class, 'export']);
+
 Route::get('/product/{id}', [ProductController::class, 'show']);
 
 Route::get('/add', [ProductController::class, 'add'])->name('product.add');
@@ -57,6 +61,7 @@ Route::put('/edit/{id}', [ProductController::class, 'update']);
 
 Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
 
+
 // Post
 Route::get('/posts', [PostController::class, 'index']);
 
@@ -66,6 +71,9 @@ Route::get('/server', [HomeController::class, 'index2']);
 
 Route::post('/handle', [HomeController::class, 'handle']);
 
-Route::get('/126148', [HomeController::class, 'index3']);
+Route::get('/126147', [HomeController::class, 'index3']);
+
+Route::get('/126148', [HomeController::class, 'index4']);
 
 Route::post('/confirmSubmit', [HomeController::class, 'handleBack']);
+
