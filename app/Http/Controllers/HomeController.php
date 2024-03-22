@@ -29,4 +29,16 @@ class HomeController extends Controller
 
         dd($req);
     }
+
+    public function index3() {
+        $lines = 'line 1 <br> line 2 <br> line 3 <br> line 4 <br> line 5';
+        return view('home3', ['lines' => $lines]);
+    }
+
+    public function handleBack(Request $request) {
+        $fullname = $request->input('fullname');
+        $age = $request->input('age');
+        $search = $request->input('search');
+        return view('confirm', ['fullname' => $fullname, 'age' => $age, 'search' => $search]);
+    }
 }
