@@ -31,6 +31,10 @@ class HomeController extends Controller
     }
 
     public function index3() {
+        return view('libs');
+    }
+
+    public function index4() {
         $lines = 'line 1 <br> line 2 <br> line 3 <br> line 4 <br> line 5';
         return view('home3', ['lines' => $lines]);
     }

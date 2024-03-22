@@ -13,9 +13,11 @@
             <a class="nav-link" href="/server">Server validation</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="/126148">126148</a>
+            <a class="nav-link" href="/126147">126147</a>
             </li>
-           
+            <li class="nav-item">
+                <a class="nav-link" href="/126148">126148</a>
+            </li>
         </ul>
         </div>
     </div>

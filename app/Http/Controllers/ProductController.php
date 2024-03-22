@@ -6,7 +6,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 class ProductController extends Controller
 {
     /**
@@ -108,5 +110,22 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->back();
+    }
+
+    public function export() 
+    {
+        return Excel::download(new ProductExport, 'product.csv'); //download file export
+        return Excel::store(new ProductExport, 'product.csv'); //lưu file export trên ổ cứng
+    }
+
+    public function import(Request $request) 
+    {
+        $file = $request->file("fileCSV");
+        
+        $fullPathFile = $file->store('products'); 
+
+        Excel::import(new ProductImport, $fullPathFile);
+
+        return redirect()->back()->with('success', 'Import thành công');
     }
 }
