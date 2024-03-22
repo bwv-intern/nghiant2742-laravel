@@ -1,4 +1,5 @@
 @extends('layouts.main')
 @section('content')
-    <h1>WELCOME!</h1>
+    <h1>WELCOME!</h1>  
 @endsection
+@include('components.navbar')

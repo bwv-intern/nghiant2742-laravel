@@ -60,9 +60,12 @@ Route::delete('/delete/{id}', [ProductController::class, 'destroy'])->name('prod
 // Post
 Route::get('/posts', [PostController::class, 'index']);
 
-
 Route::get('/client', [HomeController::class, 'index']);
 
 Route::get('/server', [HomeController::class, 'index2']);
 
 Route::post('/handle', [HomeController::class, 'handle']);
+
+Route::get('/126148', [HomeController::class, 'index3']);
+
+Route::post('/confirmSubmit', [HomeController::class, 'handleBack']);
