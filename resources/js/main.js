@@ -28,6 +28,8 @@ $(document).ready(function () {
 })
 
 $('#loginForm').submit(function (e) {
-    $('#btnLogin').text('Loading...')
-    $('#btnLogin').attr('disabled', true)
+    if ($('#email').val() !== '' && $('#password').val()) {
+        $('#btnLogin').text('Loading...')
+        $('#btnLogin').attr('disabled', true)
+    }
 });
