@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.containerLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+#loginForm {
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(228, 228, 228);
+    font-size: 15px;
+}
+
+label[id*='-error'] {
+    color: red;
+}
+
+#loginForm div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+#loginForm label {
+    min-width: 60px;
+}
+
+.group-input {
+    display: flex;
+    flex-direction: column;
+}
+
+#loginForm input {
+    width: 300px;
+}
+
+#loginForm button {
+    margin-top: 20px;
+    padding: 5px 40px;
+    cursor: pointer;
+    border: 1px solid rgb(144, 144, 144);
+}
+
+#loginForm button:hover {
+    background-color: #cecece;
+}
+
+.toastMsg {
+    position: fixed;
+    top: 30px;
+    left: 35%;
+    min-width: 30vw;
+}
