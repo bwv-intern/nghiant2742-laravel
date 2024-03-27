@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('password', 255);
             $table->string('name', 50);
             $table->tinyInteger('user_flg')->default(1);
-            $table->dateTime('date_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('phone', 20)->nullable();
             $table->text('address')->nullable();
 
