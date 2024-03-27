@@ -23,11 +23,11 @@ return new class extends Migration
 
             $table->tinyInteger('del_flg')->default(0);
             $table->bigInteger('created_by')->nullable();
-            $table->date('created_at')->nullable();
+            $table->dateTime('created_at')->nullable();
             $table->bigInteger('updated_by')->nullable();
-            $table->date('updated_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
             $table->bigInteger('deleted_by')->nullable();
-            $table->date('deleted_at')->nullable();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 
