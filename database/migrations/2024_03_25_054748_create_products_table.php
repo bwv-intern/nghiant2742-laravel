@@ -18,16 +18,16 @@ return new class extends Migration
             $table->text('content');
             $table->string('image_path', 50)->nullable();
             $table->tinyInteger('featured_flg')->default(0);
-            $table->integer('viewed')->default(0);
-            $table->integer('ordered')->default(0);
+            $table->integer('viewed')->default(0)->nullable();
+            $table->integer('ordered')->default(0)->nullable();
 
             $table->tinyInteger('del_flg')->default(0);
             $table->bigInteger('created_by')->nullable();
-            $table->dateTime('created_at')->nullable();
+            $table->date('created_at')->nullable();
             $table->bigInteger('updated_by')->nullable();
-            $table->dateTime('updated_at')->nullable();
+            $table->date('updated_at')->nullable();
             $table->bigInteger('deleted_by')->nullable();
-            $table->dateTime('deleted_at')->nullable();
+            $table->date('deleted_at')->nullable();
         });
     }
 

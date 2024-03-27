@@ -17,17 +17,17 @@ return new class extends Migration
             $table->string('password', 255);
             $table->string('name', 50);
             $table->tinyInteger('user_flg')->default(1);
-            $table->dateTime('date_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('phone', 20)->nullable();
             $table->text('address')->nullable();
 
             $table->tinyInteger('del_flg')->default(0);
             $table->bigInteger('created_by')->nullable();
-            $table->dateTime('created_at')->nullable();
+            $table->date('created_at')->nullable();
             $table->bigInteger('updated_by')->nullable();
-            $table->dateTime('updated_at')->nullable();
+            $table->date('updated_at')->nullable();
             $table->bigInteger('deleted_by')->nullable();
-            $table->dateTime('deleted_at')->nullable();
+            $table->date('deleted_at')->nullable();
         });
     }
 
