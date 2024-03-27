@@ -1,3 +1,5 @@
+import { getMsgError } from "../common";
+
 $(document).ready(function () {
     $("#loginForm").validate({
         rules: {
@@ -11,11 +13,11 @@ $(document).ready(function () {
         },
         messages: {
             email: {
-                required: "Email is required field.",
-                email: "Please enter your email address correctly.",
+                required: getMsgError('errors', 'E001', 'Email'),
+                email: getMsgError('errors', 'E004'),
             },  
             password: {
-                required: "Password is required field.",
+                required: getMsgError('errors', 'E001', 'Password'),
             },   
         },
         invalidHandler: function(form, validator) {
@@ -23,13 +25,12 @@ $(document).ready(function () {
             if (errors) {                    
                 validator.errorList[0].element.focus();
             }
+        },
+        submitHandler: function(form) {
+            var $form = $(form);
+            $('#btnLogin').html('<span class="loader"></span>Login')
+            $('#btnLogin').attr('disabled', true)
+            $form.submit();
         } 
     });
 })
-
-$('#loginForm').submit(function (e) {
-    if ($('#email').val() !== '' && $('#password').val()) {
-        $('#btnLogin').text('Loading...')
-        $('#btnLogin').attr('disabled', true)
-    }
-});

@@ -45,15 +45,13 @@ label[id*='-error'] {
     width: 300px;
 }
 
-#loginForm button {
+#loginForm #btnLogin {
     margin-top: 20px;
     padding: 5px 40px;
     cursor: pointer;
     border: 1px solid rgb(144, 144, 144);
-}
-
-#loginForm button:hover {
-    background-color: #cecece;
+    display: flex;
+    gap: 10px;
 }
 
 .toastMsg {
@@ -62,3 +60,23 @@ label[id*='-error'] {
     left: 35%;
     min-width: 30vw;
 }
+
+.loader {
+    width: 24px;
+    height: 24px;
+    border: 5px solid #FFF;
+    border-bottom-color: #21b0fd;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 

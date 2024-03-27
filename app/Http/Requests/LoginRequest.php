@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Symfony\Component\Yaml\Yaml;
+use App\Utils\MessageUtils;
 
 class LoginRequest extends FormRequest
 {
@@ -35,14 +35,13 @@ class LoginRequest extends FormRequest
      */
     public function messages(): array
     {
-        $yamlPath = file_get_contents('../messages.yaml');
-        $yamlContents = Yaml::parse($yamlPath);
-        
+        $errorMsg010 = MessageUtils::getMessage('E010');
+        $errorMsg004 = MessageUtils::getMessage('E004');
 
         return [
-            'email.required' => str_replace('{0}', 'Email', $yamlContents['errors']['E001']),
-            'email.email' => $yamlContents['errors']['E004'],
-            'password.required' => str_replace('{0}', 'Password', $yamlContents['errors']['E001']),
+            'email.required' => str_replace('{0}', 'Email', $errorMsg010),
+            'email.email' => $errorMsg004,
+            'password.required' => str_replace('{0}', 'Password', $errorMsg010),
         ];
     }
 }

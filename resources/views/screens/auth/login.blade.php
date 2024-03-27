@@ -23,13 +23,19 @@
             @csrf
             <div>
                 <label for="email" class="d-flex justify-content-end">Email</label>
-                <div class="group-input"><input type="email" name="email" id="email" value="{{ old('email') }}"></div>
+                <div class="group-input">
+                    <x-input type="email" name="email" id="email" value="{{ old('email') }}" />
+                </div>
             </div>
             <div>
                 <label for="password">Password</label>
-                <div class="group-input"><input type="password" name="password" id="password" value="{{ old('password') }}"></div>
+                <div class="group-input">
+                    <x-input type="password" name="password" id="password" value="{{ old('password') }}"/>
+                </div>
             </div>
-            <button type="submit" id="btnLogin">Login</button>
+            <button type="submit" id="btnLogin">
+                Login
+            </button>
         </form>
    </div>
 @stop
