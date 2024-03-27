@@ -21,7 +21,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('admin', [AuthController::class, 'index'])->name('admin');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
    
+    Route::get('admin/user', function() {
+        return view('screens.user.index');
+    });
+
     Route::get('admin/product', function() {
-        return view('product.index');
+        return view('screens.product.index');
     });
 });
