@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Utils\MessageUtils;
+use App\Utils\MessageUtil;
 
 class AuthController extends Controller
 {
@@ -47,8 +47,8 @@ class AuthController extends Controller
             return redirect()->intended('admin');
         }
 
-        // Get error message for error code 'E010'
-        $errorMsg = MessageUtils::getMessage('E010');
+        // Get error message for error code 'E010   '
+        $errorMsg = MessageUtil::getMessage('E010');
         
         return redirect()->back()->withInput(['email' => $email, 'password' => $password])->with('errorMsg', $errorMsg);
     }

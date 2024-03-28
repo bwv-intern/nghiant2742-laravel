@@ -6,15 +6,17 @@
     <div class="containerLogin">
         @if (session('errorMsg'))
             <div class="toastMsg">
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('errorMsg') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         @endif
         @if ($errors->any())
             <div class="toastMsg">
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ $errors->all()[0] }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         @endif

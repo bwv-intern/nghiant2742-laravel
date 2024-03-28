@@ -8,15 +8,15 @@
 
         {{-- BS5 --}}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        @vite(['resources/css/app.css'])
+        @vite(['resources/css/app.css', 'resources/css/screens/login.css'])
     </head>
     <body>
     
         @yield('content')
 
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
-        @vite(['resources/js/app.js'])
+        @vite(['resources/js/app.js', 'resources/js/screens/login.js'])
     </body>
 </html>

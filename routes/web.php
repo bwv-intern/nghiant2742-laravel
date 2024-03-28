@@ -23,6 +23,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
    
     Route::group(['middleware' => ['checkRole:0']], function () {
+        Route::get('admin/user', function() {
+            return view('screens.user.index');
+        });
+    Route::group(['middleware' => ['checkRole:0']], function () {
         Route::get('admin/user', [UserController::class, 'index'])->name('user');
         Route::get('admin/user/{id}', [UserController::class, 'show']);
         Route::post('admin/user', [UserController::class, 'store']);
