@@ -1,0 +1,4 @@
+user_flg:
+  admin: 0
+  user: 1
+  support: 2
