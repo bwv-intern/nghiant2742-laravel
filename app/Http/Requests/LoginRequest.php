@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Utils\MessageUtils;
+use App\Utils\MessageUtil;
 
 class LoginRequest extends FormRequest
 {
@@ -35,13 +35,13 @@ class LoginRequest extends FormRequest
      */
     public function messages(): array
     {
-        $errorMsg010 = MessageUtils::getMessage('E010');
-        $errorMsg004 = MessageUtils::getMessage('E004');
+        $errorMsg001 = MessageUtil::getMessage('E001', ['Email']);
+        $errorMsg004 = MessageUtil::getMessage('E004');
 
         return [
-            'email.required' => str_replace('{0}', 'Email', $errorMsg010),
+            'email.required' => str_replace('{0}', 'Email', $errorMsg001),
             'email.email' => $errorMsg004,
-            'password.required' => str_replace('{0}', 'Password', $errorMsg010),
+            'password.required' => str_replace('{0}', 'Password', $errorMsg001),
         ];
     }
 }

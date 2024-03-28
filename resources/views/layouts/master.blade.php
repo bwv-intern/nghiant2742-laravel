@@ -15,7 +15,7 @@
         @yield('content')
 
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
         @vite(['resources/js/app.js'])
     </body>
