@@ -14,16 +14,16 @@ class MessageUtil
      */
     public static function getMessage($errorCode, $params = [])
     {
-        // Đọc nội dung từ file YAML
+        // Read the content from the YAML file
         $yamlPath = file_get_contents(config_path('constants/messages.yml'));
         $yamlContents = Yaml::parse($yamlPath);
         
-        // Kiểm tra xem mã lỗi có tồn tại trong nội dung YAML không
+        // Check if the error code exists in the YAML content
         if (isset($yamlContents['errors'][$errorCode])) {
-            // Lấy thông báo từ YAML
+            // Get the message from YAML
             $message = $yamlContents['errors'][$errorCode];
             
-            // Thay thế các tham số trong thông báo
+            // Replace parameters in the message
             foreach ($params as $index => $param) {
                 $message = str_replace("{{$index}}", $param, $message);
             }
@@ -31,6 +31,6 @@ class MessageUtil
             return $message;
         }
         
-        return null; // Trả về null nếu mã lỗi không được tìm thấy
+        return null; // Return null if the error code is not found
     }
 }
