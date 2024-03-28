@@ -197,6 +197,7 @@ return [
 
         // ...other declared providers
         Barryvdh\Debugbar\ServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
     ],
 
     /*

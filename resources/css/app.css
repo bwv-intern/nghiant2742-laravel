@@ -136,7 +136,7 @@ label[id*='-error'] {
 
 .wrapper {
     border: 2px solid black;
-    height: 100%;
+    height: fit-content;
     padding: 10px 25px;
     margin-top: 10px;
 }
@@ -148,6 +148,40 @@ label[id*='-error'] {
 }
 
 .title {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: bold;
+}
+
+/* USER */
+.inputUserElement {
+    display: flex;
+}
+
+.userSearchForm input{
+    width: 200px;
+}
+
+.btnAddUser {
+    height: fit-content;
+}
+
+.inputUserElement {
+    margin-bottom: 40px;
+}
+
+.inputUserElement-checkbox {
+    display: flex;
+    gap: 20px;
+}
+
+.labelUserElement {
+    min-width: 150px;
+}
+
+.btn-custom {
+    margin-top: 20px;
+    padding: 5px 30px;
+    cursor: pointer;
+    border: 1px solid rgb(144, 144, 144);
+    border-radius: 5px;
 }

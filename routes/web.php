@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +22,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('admin', [AuthController::class, 'index'])->name('admin');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
    
-    Route::get('admin/user', function() {
-        return view('screens.user.index');
+    Route::group(['middleware' => ['checkRole:0']], function () {
+        Route::get('admin/user', [UserController::class, 'index'])->name('user');
+        Route::get('admin/user/{id}', [UserController::class, 'show']);
+        Route::post('admin/user', [UserController::class, 'store']);
+        Route::put('admin/user/{id}', [UserController::class, 'update']);
     });
 
     Route::get('admin/product', function() {
