@@ -34,4 +34,5 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('admin/product', [ProductController::class, 'index']);
     });
 
+    Route::fallback([AuthController::class, 'notFound']);
 });
