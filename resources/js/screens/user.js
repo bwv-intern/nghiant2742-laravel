@@ -16,9 +16,6 @@ $(document).ready(function () {
             email: {
                 email: getMsgError('errors', 'E004'),
             },  
-            // fullname: {
-            //     required: getMsgError('errors', 'E001', 'Fullname'),
-            // }, 
             phone: {
                 number: getMsgError('errors', 'E012', 'Phone', 'number'),
             },    
@@ -31,8 +28,8 @@ $(document).ready(function () {
         },
         submitHandler: function(form) {
             var $form = $(form);
-            $('#btnSearchUser').html('<span class="loader"></span>Search')
-            $('#btnSearchUser').attr('disabled', true)
+            $('.btnSubmit').html('<span class="loader"></span>Search')
+            $('.btnSubmit').attr('disabled', true)
 
             $form.find('input').filter(function() {
                 return !this.value;

@@ -28,8 +28,8 @@ $(document).ready(function () {
         },
         submitHandler: function(form) {
             var $form = $(form);
-            $('#btnLogin').html('<span class="loader"></span>Login')
-            $('#btnLogin').attr('disabled', true)
+            $('.btnSubmit').html('<span class="loader"></span>Login')
+            $('.btnSubmit').attr('disabled', true)
             $form.submit();
         } 
     });
