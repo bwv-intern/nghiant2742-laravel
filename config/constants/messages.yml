@@ -14,6 +14,7 @@ errors:
   E015: "{0} does not exist."
   E016: "Permission denied."
   E017: "{0} must be less than {1}."
+  E018: "Not Found"
 
 infos:
   I005: "There is no result."

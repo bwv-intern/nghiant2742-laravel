@@ -15,10 +15,6 @@ class AuthController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function index() {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Session::put('user', $user);
-        }
         return view('index');
     }
 
@@ -44,10 +40,12 @@ class AuthController extends Controller
         $password = $credentials['password'];
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            $user = Auth::user();
+            Session::put('user', $user);
             return redirect()->intended('admin');
         }
 
-        // Get error message for error code 'E010   '
+        // Get error message for error code 'E010'
         $errorMsg = MessageUtil::getMessage('E010');
         
         return redirect()->back()->withInput(['email' => $email, 'password' => $password])->with('errorMsg', $errorMsg);
@@ -61,5 +59,15 @@ class AuthController extends Controller
     public function logout() {
         Auth::logout();
         return redirect()->route('login');
+    }
+
+    /**
+     * Denied permission
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deniedPermission() {
+        $errorMsg = MessageUtil::getMessage('E016');
+        return view('screens.errors.403', ['errorMsg' => $errorMsg]);
     }
 }

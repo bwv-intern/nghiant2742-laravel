@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,14 +21,17 @@ Route::post('admin/login', [AuthController::class, 'handleLogin']);
 Route::group(['middleware' => ['auth']], function () {
     Route::get('admin', [AuthController::class, 'index'])->name('admin');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-   
+    Route::get('admin/403', [AuthController::class, 'deniedPermission'])->name('403');
+
+
     Route::group(['middleware' => ['checkRole:0']], function () {
         Route::get('admin/user', function() {
             return view('screens.user.index');
         });
     });
 
-    Route::get('admin/product', function() {
-        return view('screens.product.index');
+    Route::group(['middleware' => ['checkRole:0,2']], function () {
+        Route::get('admin/product', [ProductController::class, 'index']);
     });
+
 });

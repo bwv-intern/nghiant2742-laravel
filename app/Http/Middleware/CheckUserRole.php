@@ -19,7 +19,7 @@ class CheckUserRole
         $user = Auth::user();
 
         if (!$user || !in_array($user->user_flg, $roles)) {
-            return redirect()->route('admin')->with('msgError', "You don't have permission to access this page.");
+            return redirect()->route('403');
         }
 
         return $next($request);

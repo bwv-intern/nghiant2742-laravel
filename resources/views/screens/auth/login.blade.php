@@ -5,12 +5,7 @@
 @section('content')
     <div class="containerLogin">
         @if (session('errorMsg'))
-            <div class="toastMsg">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('errorMsg') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
+            <x-toast msg="{{ session('errorMsg') }}"/>
         @endif
         @if ($errors->any())
             <div class="toastMsg">
