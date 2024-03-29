@@ -6,7 +6,8 @@ use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\Utils\UserUtil;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller 
 {
@@ -17,10 +18,18 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userRepository->getAllUsers();
-        return view('user.index', ['users' => $users]);
+        $queryParams = $request->all();
+
+        $users = $this->userRepository->getAllUsers($queryParams);
+        foreach ($users as $user) {
+            $flg = $user->user_flg;
+            $user->user_flg = UserUtil::getUserFlag($flg);
+        }
+        Session::put('oldQuery', $queryParams);
+
+        return view('screens.user.index', ['users' => $users]);
     }
 
     public function store(Request $request): JsonResponse 

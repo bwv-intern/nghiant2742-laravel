@@ -15,10 +15,6 @@
     font-size: 15px;
 }
 
-label[id*='-error'] {
-    color: red;
-}
-
 #loginForm div {
     display: flex;
     justify-content: flex-end;
