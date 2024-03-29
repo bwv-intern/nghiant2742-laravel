@@ -4,12 +4,7 @@
 
 @section('content')
     @if (session('msgError'))
-        <div class="toastMsg">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('msgError') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
+        <x-toast msg="{{ session('msgError') }}"/>
     @endif
     <span>
         <a class="breadscrumb-active" disabled="disabled">Top</a>
