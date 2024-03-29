@@ -1,8 +1,8 @@
 <nav class="d-flex justify-content-between p-2 px-4 navbarAdmin">
-    <h5>Intern Training</h5>
+    <label class="projectName">Intern Training</label>
 
     <div>
-        <span class="px-4">{{ session('user')->name }}</span>
+        <label class="px-4">{{ session('user')->name }}</label>
         <a href="{{ route('logout') }}">Logout</a>
     </div>
 </nav>

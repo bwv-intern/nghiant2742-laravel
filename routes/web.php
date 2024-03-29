@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ErrorController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,11 +20,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('admin/login', [AuthController::class, 'login'])->name('login');
 Route::post('admin/login', [AuthController::class, 'handleLogin']);
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
     Route::get('admin', [AuthController::class, 'index'])->name('admin');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-   
-    Route::get('admin/product', function() {
-        return view('product.index');
+    Route::get('admin/error/403', [ErrorController::class, 'deniedPermission'])->name('403');
+    Route::get('admin/error/404', [ErrorController::class, 'notFound'])->name('404');
+    Route::fallback(function () {
+        return redirect()->route('404');
+    });
+
+
+    Route::group(['middleware' => ['checkRole:0']], function () {
+        Route::get('admin/user', [UserController::class, 'index'])->name('user');
+    });
+
+    Route::group(['middleware' => ['checkRole:0,2']], function () {
+        Route::get('admin/product', [ProductController::class, 'index'])->name('product');
     });
 });

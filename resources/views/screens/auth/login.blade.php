@@ -5,37 +5,22 @@
 @section('content')
     <div class="containerLogin">
         @if (session('errorMsg'))
-            <div class="toastMsg">
-                <div class="alert alert-danger">
-                    {{ session('errorMsg') }}
-                </div>
-            </div>
+            <x-toast msg="{{ session('errorMsg') }}"/>
         @endif
         @if ($errors->any())
             <div class="toastMsg">
-                <div class="alert alert-danger">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ $errors->all()[0] }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         @endif
 
         <form action="{{ route('login') }}" method="post" id="loginForm">
             @csrf
-            <div>
-                <label for="email" class="d-flex justify-content-end">Email</label>
-                <div class="group-input">
-                    <x-input type="email" name="email" id="email" value="{{ old('email') }}" />
-                </div>
-            </div>
-            <div>
-                <label for="password">Password</label>
-                <div class="group-input">
-                    <x-input type="password" name="password" id="password" value="{{ old('password') }}"/>
-                </div>
-            </div>
-            <button type="submit" id="btnLogin">
-                Login
-            </button>
+            <x-input type="email" labelName="Email" name="email" id="email" value="{{ old('email') }}" />
+            <x-input type="password" labelName="Password" name="password" id="password" value="{{ old('password') }}"/>
+            <x-button type="submit" id="btnLogin" showName="Login" class="btnSubmit"/>
         </form>
    </div>
 @stop
