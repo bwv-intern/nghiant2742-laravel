@@ -18,8 +18,7 @@ class BaseRepository implements BaseRepositoryInterface
      *
      * @param Model $model
      */
-    public function __construct(Model $model)
-    {
+    public function __construct(Model $model) {
         $this->model = $model;
     }
 
@@ -30,8 +29,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $relations
      * @return Collection
      */
-    public function getAll(array $columns = ['*'], array $relations = []): Collection
-    {
+    public function getAll(array $columns = ['*'], array $relations = []): Collection {
         return $this->model->with($relations)->get($columns);
     }
 
@@ -41,8 +39,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param int $id
      * @return Model|null
      */
-    public function getById($id): ?Model
-    {
+    public function getById($id): ?Model {
         return $this->model->find($id);
     }
 
@@ -52,8 +49,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param int $id
      * @return bool|null
      */
-    public function delete($id): ?bool
-    {
+    public function delete($id): ?bool {
         return $this->getById($id)->delete();
     }
 
@@ -63,8 +59,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $data
      * @return Model
      */
-    public function store(array $data): Model
-    {
+    public function store(array $data): Model {
         return $this->model->create($data);
     }
 
@@ -75,8 +70,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $data
      * @return bool
      */
-    public function update($id, array $data): bool
-    {
+    public function update($id, array $data): bool {
         return $this->getById($id)->update($data);
     }
 }

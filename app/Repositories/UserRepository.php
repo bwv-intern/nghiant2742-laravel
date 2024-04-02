@@ -18,15 +18,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      *
      * @param Model $model
      */
-    public function __construct(User $model)
-    {
+    public function __construct(User $model) {
         $this->model = $model;
     }
 
     public function search($queryParams) {
-        $del_flg = ConstUtil::getContentYml('common', 'del_flg');
-        // dd($queryParams);
-        $users = User::where('del_flg', $del_flg);
+        $delFlg = ConstUtil::getContentYml('common', 'del_flg', 'no');
+        
+        $users = User::where('del_flg', $delFlg);
         if (isset($queryParams['email'])) {
             $users = $users->where('email', $queryParams['email']);
         }

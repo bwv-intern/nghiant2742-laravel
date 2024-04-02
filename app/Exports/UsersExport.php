@@ -14,8 +14,7 @@ use Carbon\Carbon;
 class UsersExport implements FromCollection, WithHeadings, WithMapping
 {
     //assign headers
-    public function headings(): array
-    {
+    public function headings(): array {
         return [
             'user_id',
             'email',
@@ -30,30 +29,28 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    public function collection()
-    {
+    public function collection() {
         $userRepository = new UserRepository(new User);
-        if (request()->session()->exists('queryParams')) {
+        if (request()->session()->exists('userQueryParams')) {
             // get data users from session
-            $queryParams = Session::get('queryParams');
+            $userQueryParams = Session::get('userQueryParams');
             // search and get users
-            $users = (Object) $userRepository->search($queryParams);
+            $users = (Object) $userRepository->search($userQueryParams);
             return $users->get();
         } else {
-            $del_flg = ConstUtil::getContentYml('common', 'del_flg');
+            $delFlg = ConstUtil::getContentYml('common', 'del_flg', 'no');
             // return default users
-            return User::where('del_flg', $del_flg)->get();
+            return User::where('del_flg', $delFlg)->get();
         }
     }
 
 
-    public function map($user): array
-    {
+    public function map($user): array {
         return [
-            $user->user_id,
+            $user->id,
             $user->email,
             $user->name,
-            strval($user->user_flg),
+            ConstUtil::getContentYml('users','user_flg', $user->user_flg),
             Carbon::parse($user->date_of_birth)->format('Y-m-d'),
             $user->phone,
             $user->address,

@@ -14,30 +14,28 @@ class UserController extends Controller
 {
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository) 
-    {
+    public function __construct(UserRepositoryInterface $userRepository) {
         $this->userRepository = $userRepository;
     }
 
-    public function index(Request $request)
-    {
-        $queryParams = $request->all();
+    public function index(Request $request) {
+        $userQueryParams = $request->all();
 
         $users = $this->userRepository->getAll();
 
-        if(!empty($queryParams['clear'])) {
-            Session::forget('queryParams');
+        if(!empty($userQueryParams['clear'])) {
+            Session::forget('userQueryParams');
             return redirect()->route('user');
         }
 
-        if(!empty($queryParams)){
-            Session::put('queryParams', $queryParams);
+        if(!empty($userQueryParams)){
+            Session::put('userQueryParams', $userQueryParams);
         } else {
-            Session::forget('queryParams');
+            Session::forget('userQueryParams');
         }
 
-        if(Session::has('queryParams')) {
-            $users = $this->userRepository->search($queryParams);
+        if(Session::has('userQueryParams')) {
+            $users = $this->userRepository->search($userQueryParams);
             $users = PaginateUtil::paginateModel($users);
         } else {
             $users = PaginateUtil::paginateModel(new User);
@@ -51,13 +49,11 @@ class UserController extends Controller
         return view('screens.user.index', ['users' => $users]);
     }
 
-    public function create()
-    {
+    public function create() {
         return view('screens.user.add');
     }
 
-    public function exportCSV()
-    {
+    public function exportCSV() {
         $fileName = date('YmdHis').'_'. 'user.csv';
         return Excel::download(new UsersExport, $fileName);
     }
