@@ -13,7 +13,7 @@ class ErrorController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function deniedPermission() {
-        $errorMsg = MessageUtil::getMessage('E016');
+        $errorMsg = MessageUtil::getMessage('errors', 'E016');
         return view('screens.errors.403', ['errorMsg' => $errorMsg]);
     }
 
@@ -23,7 +23,7 @@ class ErrorController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function notFound() {
-        $errorMsg = MessageUtil::getMessage('E018');
+        $errorMsg = MessageUtil::getMessage('errors', 'E018');
         return view('screens.errors.404', ['errorMsg' => $errorMsg]);
     }
 }

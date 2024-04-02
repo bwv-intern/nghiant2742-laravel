@@ -10,8 +10,7 @@ class LoginRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
+    public function authorize(): bool {
         return true;
     }
 
@@ -20,8 +19,7 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             'email' => 'required|email',
             'password' => 'required',
@@ -33,12 +31,11 @@ class LoginRequest extends FormRequest
      *
      * @return array
      */
-    public function messages(): array
-    {
+    public function messages(): array {
         return [
-            'email.required' => MessageUtil::getMessage('E001', ['Email']),
-            'email.email' => MessageUtil::getMessage('E004'),
-            'password.required' => MessageUtil::getMessage('E001', ['Password']),
+            'email.required' => MessageUtil::getMessage('errors', 'E001', ['Email']),
+            'email.email' => MessageUtil::getMessage('errors', 'E004'),
+            'password.required' => MessageUtil::getMessage('errors', 'E001', ['Password']),
         ];
     }
 }

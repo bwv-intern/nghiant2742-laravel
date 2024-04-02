@@ -1,4 +1,4 @@
 user_flg:
-  admin: 0
-  user: 1
-  support: 2
+  0: "admin"
+  1: "user"
+  2: "support"

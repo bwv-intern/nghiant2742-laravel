@@ -22,7 +22,7 @@
                             <a href="{{ route('user') }}">Users</a>
                         </li>
                         <li>
-                            <a href="{{ route('404') }}">Categories</a>
+                            <a>Categories</a>
                         </li>
                         <li>
                             <a href="{{ route('product') }}">Products</a>
