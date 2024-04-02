@@ -27,6 +27,8 @@ class UserFactory extends Factory
             'date_of_birth' => fake()->date(),
             'phone' => '0123456789',
             'address' => fake()->address(),
+            'del_flg' => rand(0, 1),
+            'created_by' => '0',
         ];
     }
 

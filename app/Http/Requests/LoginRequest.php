@@ -36,9 +36,9 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => MessageUtil::getMessage('E001', ['Email']),
-            'email.email' => MessageUtil::getMessage('E004'),
-            'password.required' => MessageUtil::getMessage('E001', ['Password']),
+            'email.required' => MessageUtil::getMessage('errors', 'E001', ['Email']),
+            'email.email' => MessageUtil::getMessage('errors', 'E004'),
+            'password.required' => MessageUtil::getMessage('errors', 'E001', ['Password']),
         ];
     }
 }

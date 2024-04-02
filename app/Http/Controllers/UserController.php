@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Interfaces\UserRepositoryInterface;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
+use App\Utils\MessageUtil;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Utils\UserUtil;
+use App\Utils\PaginateUtil;
 use Illuminate\Support\Facades\Session;
-
+use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller 
 {
     private UserRepositoryInterface $userRepository;
@@ -22,58 +23,42 @@ class UserController extends Controller
     {
         $queryParams = $request->all();
 
-        $users = $this->userRepository->getAllUsers($queryParams);
-        foreach ($users as $user) {
-            $flg = $user->user_flg;
-            $user->user_flg = UserUtil::getUserFlag($flg);
+        $users = $this->userRepository->getAll();
+
+        if(!empty($queryParams['clear'])) {
+            Session::forget('queryParams');
+            return redirect()->route('user');
         }
-        Session::put('oldQuery', $queryParams);
+
+        if(!empty($queryParams)){
+            Session::put('queryParams', $queryParams);
+        } else {
+            Session::forget('queryParams');
+        }
+
+        if(Session::has('queryParams')) {
+            $users = $this->userRepository->search($queryParams);
+            $users = PaginateUtil::paginateModel($users);
+        } else {
+            $users = PaginateUtil::paginateModel(new User);
+        }
+
+        if (count($users) === 0) {
+            $msgInfo = MessageUtil::getMessage('infos', 'I005');
+            return view('screens.user.index', ['users' => [], 'msgInfo' => $msgInfo]);
+        }
 
         return view('screens.user.index', ['users' => $users]);
     }
 
-    public function store(Request $request): JsonResponse 
+    public function create()
     {
-        $userDetails = $request->only([
-            'client',
-            'details'
-        ]);
-
-        return response()->json(
-            [
-                'data' => $this->userRepository->createUser($userDetails)
-            ],
-            Response::HTTP_CREATED
-        );
+        return view('screens.user.add');
     }
 
-    public function show(Request $request): JsonResponse 
+    public function exportCSV()
     {
-        $userId = $request->route('id');
-
-        return response()->json([
-            'data' => $this->userRepository->getUserById($userId)
-        ]);
-    }
-
-    public function update(Request $request): JsonResponse 
-    {
-        $userId = $request->route('id');
-        $userDetails = $request->only([
-            'client',
-            'details'
-        ]);
-
-        return response()->json([
-            'data' => $this->userRepository->updateUser($userId, $userDetails)
-        ]);
-    }
-
-    public function destroy(Request $request): JsonResponse 
-    {
-        $userId = $request->route('id');
-        $this->userRepository->deleteUser($userId);
-
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        $fileName = date('YmdHis').'_'. 'user.csv';
+        return Excel::download(new UsersExport, $fileName);
     }
 }

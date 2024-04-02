@@ -6,8 +6,6 @@ $(document).ready(function () {
             email: {
                 email: true,
             },
-            fullname: {
-            },
             phone: {
                 number: true
             },
@@ -28,27 +26,22 @@ $(document).ready(function () {
         },
         submitHandler: function(form) {
             var $form = $(form);
-            $('.btnSubmit').html('<span class="loader"></span>Search')
-            $('.btnSubmit').attr('disabled', true)
-
-            $form.find('input').filter(function() {
-                return !this.value;
-            }).prop('disabled', true);
-            
-            $form.submit();
+            if ($(form).valid()) {
+                $form.find('input').filter(function() {
+                    return !this.value;
+                }).prop('disabled', true);
+                $form.submit();
+            }
         } 
     });
 
-    $("#paginationForm button").click(function() {
-        var page = $(this).data("page");
-        var form = $("#paginationForm");
-        
+    $("#btnClear").click(function() {
+        var form = $("#userSearchForm");
         $("<input>").attr({
             type: "hidden",
-            name: "page",
-            value: page
+            name: "clear",
+            value: "clear"
         }).appendTo(form);
-
         form.submit();
     });
 })

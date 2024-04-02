@@ -46,7 +46,7 @@ class AuthController extends Controller
         }
 
         // Get error message for error code 'E010'
-        $errorMsg = MessageUtil::getMessage('E010');
+        $errorMsg = MessageUtil::getMessage('errors', 'E010');
         
         return redirect()->back()->withInput(['email' => $email, 'password' => $password])->with('errorMsg', $errorMsg);
     }

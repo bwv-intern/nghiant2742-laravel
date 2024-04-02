@@ -4,65 +4,44 @@ namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use App\Utils\ConstUtil;
 
-class UserRepository implements UserRepositoryInterface 
+class UserRepository extends BaseRepository implements UserRepositoryInterface 
 {
-    public function getAllUsers($queryParams) {
-        // Start building the query
-        $query = User::query();
+    /**
+     * @var Model
+     */
+    protected $model;
 
-        // Check if any query parameters are provided
-        if (!empty($queryParams)) {
-            foreach ($queryParams as $key => $value) {
-                switch ($key) {
-                    case 'email':
-                        // Add condition to filter by email
-                        $query->where('email', $value);
-                        break;
-                    case 'user_flg':
-                        // Change the field name from 'admin_flag' to 'user_flg'
-                        $query->whereIn('user_flg', $value);
-                        break;
-                    case 'dateOfBirth':
-                        // Add condition to filter by date of birth
-                        $query->where('date_of_birth', $value);
-                        break;
-                    case 'name':
-                        // Add condition to filter by fullname (assuming it's a partial match)
-                        $query->where('name', 'like', '%' . $value . '%');
-                        break;
-                    case 'phone':
-                        // Add condition to filter by phone
-                        $query->where('phone', $value);
-                        break;
-                    // Add additional cases for handling other query parameters (if needed)
-                }
-            }
+    /**
+     * BaseRepository constructor.
+     *
+     * @param Model $model
+     */
+    public function __construct(User $model)
+    {
+        $this->model = $model;
+    }
+
+    public function search($queryParams) {
+        $del_flg = ConstUtil::getContentYml('common', 'del_flg');
+        // dd($queryParams);
+        $users = User::where('del_flg', $del_flg);
+        if (isset($queryParams['email'])) {
+            $users = $users->where('email', $queryParams['email']);
         }
-        
-        // Execute the query and return the result
-        return $query->get();
+        if (isset($queryParams['user_flg'])) {
+            $users = $users->whereIn('user_flg', $queryParams['user_flg']);
+        }
+        if (isset($queryParams['name'])) {
+            $users = $users->where('name', 'LIKE', "%" . $queryParams['name'] . "%");
+        }
+        if (isset($queryParams['dateOfBirth'])) {
+            $users = $users->where('date_of_birth', $queryParams['dateOfBirth']);
+        }
+        if (isset($queryParams['phone'])) {
+            $users = $users->where('phone', $queryParams['phone']);
+        }
+        return $users;
     }
-
-
-    public function getUserById($userId) 
-    {
-        return User::findOrFail($userId);
-    }
-
-    public function deleteUser($userId) 
-    {
-        User::destroy($userId);
-    }
-
-    public function createUser(array $userDetails) 
-    {
-        return User::create($userDetails);
-    }
-
-    public function updateUser($userId, array $newDetails) 
-    {
-        return User::whereId($userId)->update($newDetails);
-    }
-
 }

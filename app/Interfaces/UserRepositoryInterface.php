@@ -2,11 +2,7 @@
 
 namespace App\Interfaces;
 
-interface UserRepositoryInterface 
+interface UserRepositoryInterface extends BaseRepositoryInterface
 {
-    public function getAllUsers($queryParams);
-    public function getUserById($userId);
-    public function deleteUser($userId);
-    public function createUser(array $userDetails);
-    public function updateUser($userId, array $newInfos);
+    public function search(array $queryParams);
 }
