@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin')
+@vite(['resources/css/screens/user.css'])
 
 @section('content')
     @if ($errors->any())

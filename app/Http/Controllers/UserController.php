@@ -49,12 +49,19 @@ class UserController extends Controller
         return view('screens.user.index', ['users' => $users]);
     }
 
-    public function create() {
+    public function exportCSV()
+    {
+        $fileName = date('YmdHis').'_'. 'user.csv';
+        return Excel::download(new UsersExport, $fileName);
+    }
+
+    public function create()
+    {
         return view('screens.user.add');
     }
 
-    public function exportCSV() {
-        $fileName = date('YmdHis').'_'. 'user.csv';
-        return Excel::download(new UsersExport, $fileName);
+    public function store(Request $request)
+    {
+        dd($request->all());
     }
 }

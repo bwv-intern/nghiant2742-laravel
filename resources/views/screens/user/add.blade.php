@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin')
+@vite(['resources/css/screens/user.css'])
 
 @section('content')
     <div class="breadscrumb">
@@ -10,28 +11,34 @@
     </div>
     <div class="wrapper">
         <div class="d-flex mb-5">
-            <label class="title">USERS ADD</label>
+            <label class="title">User add</label>
         </div>
-        
-        <form action="{{ route('user') }}" method="GET" class="d-flex" id="userSearchForm">
+        <form action="{{ route('user.store') }}" method="POST" class="d-flex">
+            @csrf
             <div class="row gx-0 w-100">
                 <div class="col-6 ">
-                    <x-input.common labelName='Email' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="email" name="email" id="email" value="{{ Session::get('queryParams')['email'] ?? '' }}"/>
+                    <x-input.common labelName='Email' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="email" name="email" id="email" value="{{ Session::get('inputUser')['email'] ?? '' }}"/>
 
-                    <x-input.checkbox labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement-checkbox' :options="isCheckedBox(Session::get('queryParams')['user_flg'] ?? null)"/>
+                    <x-input.common labelName='Password' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="password" name="password" id="password" value="{{ Session::get('inputUser')['password'] ?? '' }}"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="dateOfBirth" id="dateOfBirth" value="{{ Session::get('queryParams')['dateOfBirth'] ?? '' }}"/>
+                    <x-input.select labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement' :options="getArrayUserFlg()"/>
+
+                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="dateOfBirth" id="dateOfBirth" value="{{ Session::get('inputUser')['dateOfBirth'] ?? '' }}"/>
                     
+                    <x-input.textarea labelName='Address' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="textarea" name="address" id="address" value="{{ Session::get('inputUser')['address'] ?? '' }}" rows="4"/>
+
                 </div>
                 
                 <div class="col-6">
-                    <x-input.common labelName='Full name' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="name" id="name" value="{{ Session::get('queryParams')['name'] ?? '' }}"/>
+                    <x-input.common labelName='Full name' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="name" id="name" value="{{ Session::get('inputUser')['name'] ?? '' }}"/>
 
-                    <x-input.common labelName='Phone' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="phone" id="phone" value="{{ Session::get('queryParams')['phone'] ?? '' }}"/>
+                    <x-input.common labelName='Re-password' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="password" name="re_password" id="re_password" value="{{ Session::get('inputUser')['repassword'] ?? '' }}"/>
+
+                    <x-input.common labelName='Phone' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="phone" id="phone" value="{{ Session::get('inputUser')['phone'] ?? '' }}"/>
                     
                 </div>
-                <div class="col-12 d-flex gap-2 justify-content-end">
-                    <x-button.submit id="btnSearchUser" buttonName="Add" class="btn-custom btnSubmit"/>
+                <div class="col-12 d-flex gap-2 justify-content-center">
+                    <x-button.submit buttonName="Add" class="btn-custom btnSubmit"/>
                 </div>
             </div>
         </form>
