@@ -7,8 +7,8 @@
     @if ($errors->any())
         <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
     @endif
-    @if (isset($msgInfo))
-        <x-toast msg="{{$msgInfo}}" type="info"/>
+    @if (isset($msgInfo) || Session::get('msgInfo'))
+        <x-toast msg="{{$msgInfo ?? Session::get('msgInfo')}}" type="info"/>
     @endif
     <div class="breadscrumb">
         <a href="{{ route('admin') }}">Top</a> > 
@@ -46,8 +46,7 @@
         </form>
    </div>
    @if (count($users)!==0)
-    <div class="wrapper">
-            {{-- <x-paginateCustom :users="$users"/> --}}
+
             {{ $users->links('components.paginateCustom') }}
             {{-- Table of users --}}
                 <table class="table table-striped table-bordered">
@@ -82,6 +81,10 @@
             </div>
     @endif
    
-
+<div id="overlay">
+    <div id="overlay_body">
+        <div class="loader"></div>  
+    </div>
+</div>
 @stop
 @vite(['resources/js/screens/user.js'])

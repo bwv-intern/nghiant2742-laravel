@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Utils\ConstUtil;
-use DebugBar\DebugBar;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -37,5 +39,26 @@ class UserService
         }
 
         return $options;
+    }
+
+    // handle input of add/update to return array of input data
+    public function handleInput(Request $request, $method = '')
+    {
+        $input = $request->all();
+        $data = [
+            'name' => $input['name'],
+            'user_flg' => $input['user_flg'],
+            'phone' => $input['phone'],
+            'address' => $input['address'],
+            'date_of_birth' => $input['dateOfBirth'],
+        ];
+        // Only add new user when method = add
+        if ($method == 'add') {
+            $data['email'] = $input['email'];
+            $data['password'] = Hash::make($input['password']);
+            $data['created_by'] = Auth::id();
+        }
+
+        return $data;
     }
 }

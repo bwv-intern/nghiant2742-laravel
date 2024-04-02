@@ -28,10 +28,7 @@ export function getMsgError(state, code, x = "", y = "", z = ""){
     return message.replace(/\{0\}/g, x).replace(/\{1\}/g, y).replace(/\{2\}/g, z);
 }
 
-$(function() {
-    $('form').submit(function (e) { 
-        let buttonName = $('.btnSubmit').text();
-        $('.btnSubmit').html(`<span class="loader"></span>${buttonName}`)
-        $('.btnSubmit').attr('disabled', true)
-    });
-})
+export function initOverlay(){
+    $('#overlay').css('display', 'block')
+}
+
