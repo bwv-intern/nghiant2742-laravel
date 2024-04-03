@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BaseRepository implements BaseRepositoryInterface 
 {
@@ -57,10 +58,14 @@ class BaseRepository implements BaseRepositoryInterface
      * Store a newly created resource in storage.
      *
      * @param array $data
-     * @return Model
+     * @return bool
      */
-    public function store(array $data): Model {
-        return $this->model->create($data);
+    public function store(array $data): bool {
+        return DB::transaction(function () use ($data) {
+            $this->model->create($data);
+            return true;
+        });
+        return false;
     }
 
     /**

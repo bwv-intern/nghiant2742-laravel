@@ -13,6 +13,7 @@ class PaginateUtil
      */
     public static function paginateModel($model, $perItem = 10)
     {
-        return $model->paginate($perItem);
+        $delFlg = ConstUtil::getContentYml('common', 'del_flg', 'no');
+        return $model->where('del_flg', $delFlg)->paginate($perItem);
     }
 }

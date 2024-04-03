@@ -14,9 +14,16 @@
     
         @yield('content')
 
+        <div id="overlay">
+            <div id="overlay_body">
+                <div class="loader"></div>  
+            </div>
+        </div>
+        
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('js/jquery/jquery.validation/custom-jquery.validate.js') }}"></script>
         @vite(['resources/js/app.js', 'resources/js/screens/login.js'])
     </body>
 </html>

@@ -1,21 +1,16 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin')
+@vite(['resources/css/screens/user.css'])
 
 @section('content')
-    @if ($errors->any())
-        <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
-    @endif
-    @if (isset($msgInfo))
-        <x-toast msg="{{$msgInfo}}" type="info"/>
-    @endif
     <div class="breadscrumb">
         <a href="{{ route('admin') }}">Top</a> > 
         <a class="breadscrumb-active" disabled="disabled">Users</a>
     </div>
     <div class="wrapper">
         <div class="d-flex justify-content-between mb-5">
-            <label class="title">USERS SEARCH</label>
+            <label class="title">User search</label>
             <a class="btn btn-primary btnAddUser" href="{{ route('user.add') }}">Add user</a>
         </div>
         
@@ -38,15 +33,14 @@
                 </div>
                 <div class="col-12 d-flex gap-2 justify-content-end">
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom"/>
-                    <x-button.submit id="btnClear" name="clearForm" buttonName="Clear" class="btn-custom"/>
+                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom" value="true"/>
                     <a class="btn-custom" href="{{ route('user.export') }}">Export CSV</a>
                 </div>
             </div>
         </form>
    </div>
    @if (count($users)!==0)
-    <div class="wrapper">
-            {{-- <x-paginateCustom :users="$users"/> --}}
+
             {{ $users->links('components.paginateCustom') }}
             {{-- Table of users --}}
                 <table class="table table-striped table-bordered">
@@ -80,7 +74,5 @@
                 </table>
             </div>
     @endif
-   
-
 @stop
 @vite(['resources/js/screens/user.js'])
