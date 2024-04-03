@@ -1,24 +1,18 @@
-import { getMsgError } from "../common";
+import { initOverlay } from "../common";
 
-$(document).ready(function () {
+$(function () {
     $("#loginForm").validate({
         rules: {
             email: {
-                required: true,
+                required: ['Email'],
                 email: true,
             },
             password: {
-                required: true,
+                required: ['Password'],
             },
         },
-        messages: {
-            email: {
-                required: getMsgError('errors', 'E001', 'Email'),
-                email: getMsgError('errors', 'E004'),
-            },  
-            password: {
-                required: getMsgError('errors', 'E001', 'Password'),
-            },   
+        onfocusout: function(element) {
+            $(element).valid();
         },
         invalidHandler: function(form, validator) {
             var errors = validator.numberOfInvalids();
@@ -28,7 +22,13 @@ $(document).ready(function () {
         },
         submitHandler: function(form) {
             var $form = $(form);
-            $form.submit();
+            if ($(form).valid()) {
+                // Init overlay
+                initOverlay()
+                $form.trigger( "submit" );
+            }
         } 
     });
+
+
 })

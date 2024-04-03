@@ -1,47 +1,92 @@
-import { getMsgError } from "../common";
+import { initOverlay } from "../common";
 
-$(document).ready(function () {
+$(function () {
+
+    // Validate search form before submitting
     $("#userSearchForm").validate({
         rules: {
             email: {
                 email: true,
             },
             phone: {
-                number: true
+                number: ['Phone', 'number']
             },
         },
-        messages: {
-            email: {
-                email: getMsgError('errors', 'E004'),
-            },  
-            phone: {
-                number: getMsgError('errors', 'E012', 'Phone', 'number'),
-            },    
-        },
         invalidHandler: function(form, validator) {
-            var errors = validator.numberOfInvalids();
+            let errors = validator.numberOfInvalids();
             if (errors) {                    
                 validator.errorList[0].element.focus();
             }
         },
         submitHandler: function(form) {
-            var $form = $(form);
+            let $form = $(form);
             if ($(form).valid()) {
-                $form.find('input').filter(function() {
-                    return !this.value;
-                }).prop('disabled', true);
-                $form.submit();
+                // Filter to remove empty input
+                let $validInputs = $form.find(':input').filter(function() {
+                    return $.trim($(this).val()) !== '';
+                });
+                $form.find(':input').not($validInputs).attr('disabled', true);
+
+                // init overlay
+                initOverlay()
+                // alert('Stop')
+                $form.trigger( "submit" );
             }
         } 
     });
 
-    $("#btnClear").click(function() {
-        var form = $("#userSearchForm");
-        $("<input>").attr({
-            type: "hidden",
-            name: "clear",
-            value: "clear"
-        }).appendTo(form);
-        form.submit();
+    // Handle event clear search form
+    $("#btnClear").on( "click", function() {
+        const currentURL = window.location.href;
+        const url = new URL(currentURL);
+        if (url.search) {
+            let url = currentURL + "&clear=true";
+            initOverlay()
+            window.location.href = url;
+        } else {
+            alert('Nothing to clear');
+        }
+    });
+
+    // Validate add user form
+    $("#addUserForm").validate({
+        rules: {
+            name: {
+                required: ['Name'],
+            },
+            email: {
+                required: ['Email'],
+                email: true
+            },
+            password: {
+                required: ['Password'],
+                minlength: 6,
+            },
+            re_password: {
+                required: ['Re-password'],
+                equalTo: "#password",
+                minlength: 6,
+            },
+            phone: {
+                number: ['Phone', 'number']
+            },
+        },
+        onfocusout: function(element) {
+            $(element).valid();
+        },
+        invalidHandler: function(form, validator) {
+            let errors = validator.numberOfInvalids();
+            if (errors) {                    
+                validator.errorList[0].element.focus();
+            }
+        },
+        submitHandler: function(form) {
+            let $form = $(form);
+            if ($(form).valid()) {
+                // Init overlay
+                initOverlay()
+                $form.trigger( "submit" );
+            }
+        } 
     });
 })

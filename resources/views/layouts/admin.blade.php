@@ -30,15 +30,26 @@
                     </ul>
                 </div>
                 <div class="col-9 contentAdmin">
+                    @if ($errors->any())
+                        <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
+                    @endif
+                    @if (isset($msgInfo) || Session::get('msgInfo'))
+                        <x-toast msg="{{$msgInfo ?? Session::get('msgInfo')}}" type="info"/>
+                    @endif
                     @yield('content')
                 </div>
             </div>
-        
+        </div>
+        <div id="overlay">
+            <div id="overlay_body">
+                <div class="loader"></div>  
+            </div>
         </div>
 
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('js/jquery/jquery.validation/custom-jquery.validate.js') }}"></script>
         @vite(['resources/js/app.js', 'resources/js/screens/admin.js'])
     </body>
 </html>

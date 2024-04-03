@@ -1,17 +1,13 @@
 $(function () {
-    const sidebarItem = $('.sidebar a');
-    for (let index = 0; index < sidebarItem.length; index++) {
-        const element = sidebarItem[index];
-        const url = element.href;
-        const endpoint = new URL(url).pathname;
-        const currentURL = window.location.href;
-        
-        if (currentURL.includes(endpoint)) {
-            element.classList.add('activeItem');
+    const currentURL = window.location.pathname;
+    $('.sidebar a').each(function() {
+        const url = this.pathname;
+        if (currentURL === url) {
+            $(this).addClass('activeItem');
         }
-    }
+    });
 
-    $('.projectName').click(function (e) { 
+    $('.projectName').on("click", function (e) {
         e.preventDefault();
         window.location.href = '/admin';
     });
