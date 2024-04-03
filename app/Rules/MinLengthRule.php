@@ -32,7 +32,7 @@ class MinLengthRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $this->currNumber = strlen($value);
+        $this->currNumber = mb_strlen($value);
         $isLarger = $this->currNumber >= $this->maxNumber;
 
         if(!$isLarger){

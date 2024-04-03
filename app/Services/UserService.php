@@ -41,8 +41,8 @@ class UserService
         return $options;
     }
 
-    // handle input of add/update to return array of input data
-    public function handleInput(Request $request, $method = '')
+    // Handle input of add/update to return array of input data
+    public function handleSaveData(Request $request, $method = '')
     {
         $input = $request->all();
         $data = [
@@ -56,7 +56,6 @@ class UserService
         if ($method == 'add') {
             $data['email'] = $input['email'];
             $data['password'] = Hash::make($input['password']);
-            $data['created_by'] = Auth::id();
         }
 
         return $data;

@@ -64,10 +64,10 @@ class UserController extends Controller
     }
 
     public function store(StoreUserRequest $request) {
-        $user = $this->userService->handleInput($request, 'add');
-        if ($user) {
-            $this->userRepository->store($user);
-
+        $user = $this->userService->handleSaveData($request, 'add');
+        $isSaved = $this->userRepository->store($user);
+        
+        if ($isSaved) {
             $msgInfo = MessageUtil::getMessage('infos', 'I013');
             return redirect()->route('user')->with('msgInfo', $msgInfo);
         }

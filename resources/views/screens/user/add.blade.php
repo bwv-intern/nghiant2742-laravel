@@ -4,9 +4,6 @@
 @vite(['resources/css/screens/user.css'])
 
 @section('content')
-    @if ($errors->any())
-        <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
-    @endif
     <div class="breadscrumb">
         <a href="{{ route('admin') }}">Top</a> > 
         <a href="{{ route('user') }}">Users</a> > 
@@ -46,10 +43,5 @@
             </div>
         </form>
    </div>
-<div id="overlay">
-    <div id="overlay_body">
-        <div class="loader"></div>  
-    </div>
-</div>
 @stop
 @vite(['resources/js/screens/user.js'])

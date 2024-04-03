@@ -1,6 +1,6 @@
-import { getMsgError, initOverlay } from "../common";
+import { initOverlay } from "../common";
 
-$(document).ready(function () {
+$(function () {
 
     // Validate search form before submitting
     $("#userSearchForm").validate({
@@ -9,110 +9,84 @@ $(document).ready(function () {
                 email: true,
             },
             phone: {
-                number: true
+                number: ['Phone', 'number']
             },
         },
-        messages: {
-            email: {
-                email: getMsgError('errors', 'E004'),
-            },  
-            phone: {
-                number: getMsgError('errors', 'E012', 'Phone', 'number'),
-            },    
-        },
         invalidHandler: function(form, validator) {
-            var errors = validator.numberOfInvalids();
+            let errors = validator.numberOfInvalids();
             if (errors) {                    
                 validator.errorList[0].element.focus();
             }
         },
         submitHandler: function(form) {
-            var $form = $(form);
+            let $form = $(form);
             if ($(form).valid()) {
+                // Filter to remove empty input
+                let $validInputs = $form.find(':input').filter(function() {
+                    return $.trim($(this).val()) !== '';
+                });
+                $form.find(':input').not($validInputs).attr('disabled', true);
 
                 // init overlay
                 initOverlay()
-                $form.submit();
+                // alert('Stop')
+                $form.trigger( "submit" );
             }
         } 
     });
 
     // Handle event clear search form
-    $("#btnClear").click(function() {
-        var form = $("#userSearchForm");
-        $("<input>").attr({
-            type: "hidden",
-            name: "clear",
-            value: "clear"
-        }).appendTo(form);
-        initOverlay()
-        form.submit();
+    $("#btnClear").on( "click", function() {
+        const currentURL = window.location.href;
+        const url = new URL(currentURL);
+        if (url.search) {
+            let url = currentURL + "&clear=true";
+            initOverlay()
+            window.location.href = url;
+        } else {
+            alert('Nothing to clear');
+        }
     });
 
     // Validate add user form
     $("#addUserForm").validate({
         rules: {
             name: {
-                required: true,
+                required: ['Name'],
             },
             email: {
-                required: true,
-                customEmail: true
+                required: ['Email'],
+                email: true
             },
             password: {
-                required: true,
-                min: 6,
+                required: ['Password'],
+                minlength: 6,
             },
             re_password: {
-                required: true,
+                required: ['Re-password'],
                 equalTo: "#password",
-                min: 6,
+                minlength: 6,
             },
             phone: {
-                number: true
+                number: ['Phone', 'number']
             },
         },
-        messages: {
-            name: {
-                required: getMsgError('errors', 'E001', 'Name')
-            },
-            email: {
-                required: getMsgError('errors', 'E001', 'Email'),
-                customEmail: getMsgError('errors', 'E004')
-            },
-            password: {
-                required: getMsgError('errors', 'E001', 'Password')
-            },
-            re_password: {
-                required: getMsgError('errors', 'E001', 'Re-password')
-            },
-            phone: {
-                number: getMsgError('errors', 'E012', 'Phone', 'number'),
-            },
+        onfocusout: function(element) {
+            $(element).valid();
         },
         invalidHandler: function(form, validator) {
-            var errors = validator.numberOfInvalids();
+            let errors = validator.numberOfInvalids();
             if (errors) {                    
                 validator.errorList[0].element.focus();
             }
         },
         submitHandler: function(form) {
-            var $form = $(form);
+            let $form = $(form);
             if ($(form).valid()) {
                 // Init overlay
                 initOverlay()
-                $form.submit();
+                $form.trigger( "submit" );
             }
         } 
     });
-
-    $.validator.addMethod("customEmail", function(value, element) {
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    }, getMsgError('errors', 'E004'));
-    
-    // Event focusout To validate required field
-    $("#addUserForm input[name='email'], #addUserForm input[name='name'], #addUserForm input[name='password'], #addUserForm input[name='re_password'] ").on('focusout', function() {
-        $(this).valid();
-    });
-    
 })

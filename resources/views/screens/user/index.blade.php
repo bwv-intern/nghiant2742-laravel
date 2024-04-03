@@ -4,19 +4,13 @@
 @vite(['resources/css/screens/user.css'])
 
 @section('content')
-    @if ($errors->any())
-        <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
-    @endif
-    @if (isset($msgInfo) || Session::get('msgInfo'))
-        <x-toast msg="{{$msgInfo ?? Session::get('msgInfo')}}" type="info"/>
-    @endif
     <div class="breadscrumb">
         <a href="{{ route('admin') }}">Top</a> > 
         <a class="breadscrumb-active" disabled="disabled">Users</a>
     </div>
     <div class="wrapper">
         <div class="d-flex justify-content-between mb-5">
-            <label class="title">USERS SEARCH</label>
+            <label class="title">User search</label>
             <a class="btn btn-primary btnAddUser" href="{{ route('user.add') }}">Add user</a>
         </div>
         
@@ -39,7 +33,7 @@
                 </div>
                 <div class="col-12 d-flex gap-2 justify-content-end">
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom"/>
-                    <x-button.submit id="btnClear" name="clearForm" buttonName="Clear" class="btn-custom"/>
+                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom" value="true"/>
                     <a class="btn-custom" href="{{ route('user.export') }}">Export CSV</a>
                 </div>
             </div>
@@ -80,11 +74,5 @@
                 </table>
             </div>
     @endif
-   
-<div id="overlay">
-    <div id="overlay_body">
-        <div class="loader"></div>  
-    </div>
-</div>
 @stop
 @vite(['resources/js/screens/user.js'])

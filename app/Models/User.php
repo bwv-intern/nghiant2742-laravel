@@ -25,7 +25,13 @@ class User extends Authenticatable
         'user_flg',
         'address',
         'date_of_birth',
-        'created_by'
+        'del_flg',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
