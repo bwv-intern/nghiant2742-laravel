@@ -56,19 +56,20 @@ $(function () {
             },
             email: {
                 required: ['Email'],
-                email: true
+                email: true,
+                maxlength: 50
             },
             password: {
                 required: ['Password'],
-                minlength: 6,
             },
             re_password: {
                 required: ['Re-password'],
                 equalTo: "#password",
-                minlength: 6,
             },
             phone: {
-                number: ['Phone', 'number']
+                number: ['Phone', 'number'],
+                maxlength: 20
+
             },
         },
         onfocusout: function(element) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EmailRule;
 use App\Rules\MaxLengthRule;
 use App\Rules\MinLengthRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -23,13 +24,13 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array {
         return [
-            'email' =>  ['required','email', new MaxLengthRule(50),'unique:users,email'],
+            'email' =>  ['required', new EmailRule, new MaxLengthRule(50),'unique:users,email'],
             'name' =>  ['required', new MaxLengthRule(50)],
-            'password' => ['required', new MinLengthRule(6) , new MaxLengthRule(100), 'same:re_password'],
+            'password' => ['required', 'same:re_password'],
             're_password' => 'required',
             'user_flg' => 'required',
-            'phone' =>  ['nullable','numeric', new MaxLengthRule(11)],
-            'address' => ['nullable',new MaxLengthRule(255)],
+            'phone' =>  ['nullable','numeric', new MaxLengthRule(20)],
+            'address' => ['nullable'],
             'dateOfBirth' => 'nullable|date_format:Y-m-d',
         ];
     }

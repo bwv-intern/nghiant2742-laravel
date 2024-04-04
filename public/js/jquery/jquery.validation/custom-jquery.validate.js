@@ -28,6 +28,10 @@ function getMsgError(state, code, x = "", y = "", z = ""){
     return message.replace(/\{0\}/g, x).replace(/\{1\}/g, y).replace(/\{2\}/g, z);
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 $.extend( $.validator, {
     messages: {
 		required: getMsgError('errors', 'E001', $.validator.format("{0}")),
@@ -39,7 +43,9 @@ $.extend( $.validator, {
 		number: getMsgError('errors', 'E012', "{0}", "{1}"),
 		digits: "Please enter only digits.",
 		equalTo: "Please enter the same value again.",
-		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
+		maxlength: function(param, element) {
+			return getMsgError('errors', 'E002', capitalizeFirstLetter($(element).attr('name')), param, element.value.length);
+		},
 		minlength: $.validator.format( "Please enter at least {0} characters." ),
 		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
 		range: $.validator.format( "Please enter a value between {0} and {1}." ),
@@ -49,9 +55,6 @@ $.extend( $.validator, {
 
 	},
     methods: {
-        // customEmail: function(value, element) {
-        //     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-        // }
 		// https://jqueryvalidation.org/required-method/
 		required: function( value, element, param ) {
 
