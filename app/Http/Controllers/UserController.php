@@ -89,4 +89,12 @@ class UserController extends Controller
         }
         return redirect()->back()->withErrors(MessageUtil::getMessage('errors', 'E014'));
     }
+
+    public function delete(string $id) {
+        $isDeleted = $this->userRepository->delete($id);
+        if ($isDeleted) {
+            return redirect()->route('user');
+        }
+        return redirect()->back()->withErrors("Delete failed");
+    }
 }

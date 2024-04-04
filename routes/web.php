@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
         Route::get('users/export', [UserController::class, 'exportCSV'])->name('user.export');
         Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.edit');
         Route::put('admin/user/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('admin/user/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
 
     Route::group(['middleware' => ['checkRole:0,2']], function () {

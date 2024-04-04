@@ -80,10 +80,12 @@ class BaseRepository implements BaseRepositoryInterface
      * @return bool
      */
     public function update($id, array $data): bool {
-        return DB::transaction(function () use ($id, $data) {
-            $this->getById($id)->update($data);
-            return true;
-        });
-        return false;
+        // $success = false;
+    
+        // DB::transaction(function () use ($id, $data, &$success) {
+        //     $success = $this->getById($id)->update($data);
+        // });
+        $r = $this->getById($id)->update($data);
+        return $r;
     }
 }

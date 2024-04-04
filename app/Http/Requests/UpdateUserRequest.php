@@ -4,16 +4,17 @@ namespace App\Http\Requests;
 
 use App\Rules\EmailRule;
 use App\Rules\MaxLengthRule;
-use App\Rules\MinLengthRule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Utils\MessageUtil;
+use Illuminate\Support\Facades\Auth;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
 
@@ -22,17 +23,28 @@ class StoreUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array {
-        return [
-            'email' =>  ['required', new EmailRule, new MaxLengthRule(50),'unique:users,email'],
+    public function rules(): array
+    {
+        // Get ID
+        $id = $this->segment(3);
+        $uniqueEmail = 'unique:users,email,' . $id;
+        
+        $rules = [
+            'email' =>  ['required', new EmailRule, new MaxLengthRule(50), $uniqueEmail ],
             'name' =>  ['required', new MaxLengthRule(50)],
-            'password' => ['required', 'same:re_password'],
-            're_password' => 'required',
             'user_flg' => 'required',
             'phone' =>  ['nullable','numeric', new MaxLengthRule(20)],
             'address' => ['nullable'],
             'date_of_birth' => 'nullable|date_format:Y-m-d',
         ];
+
+        // If password sent, add rules
+        if ($this->filled('password') || $this->filled('re_password')) {
+            $rules['password'] = ['required', 'same:re_password'];
+            $rules['re_password'] = 'required';
+        }
+    
+        return $rules;
     }
 
     /**
@@ -48,7 +60,7 @@ class StoreUserRequest extends FormRequest
             'email.unique' => MessageUtil::getMessage('errors', 'E009', ['Email']),
             'password.required' => MessageUtil::getMessage('errors', 'E001', ['Password']),
             'password.same' => MessageUtil::getMessage('errors', 'E011'),
-            're_password.required' => MessageUtil::getMessage('errors', 'E011', ['Password']),
+            're_password.required' => MessageUtil::getMessage('errors', 'E011', ['Re-password']),
             'phone.numeric' => MessageUtil::getMessage('errors', 'E012', ['Phone','number']),
             'date_of_birth.date_format' => MessageUtil::getMessage('errors', 'E012', ['Date','Y-m-d']),
         ];

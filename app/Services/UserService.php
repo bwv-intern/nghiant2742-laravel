@@ -66,11 +66,12 @@ class UserService
         
         // Get user id need to edit
         $id = $input['id'];
-        if (!empty($data['password'])) {
+        $data['email'] = $input['email'];
+
+        if (!empty($input['password'])) {
             $data['password'] = Hash::make($input['password']);
         }
-
-        dd($data);
-        return $userRepository->update($id, $data);
+        $r = $userRepository->update($id, $data);
+        return $r;
     }
 }

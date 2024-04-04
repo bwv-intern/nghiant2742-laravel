@@ -60,7 +60,11 @@
                             <tr>
                                 <td scope="row">
                                     <a class="btn btn-primary" href="{{ route('user.edit', $user['id']) }}">Edit</a>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <form id="deleteForm_{{ $user['id'] }}" action="{{ route('user.delete', $user['id']) }}" method="post" class="d-inline">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-danger deleteBtn" data-id={{ $user['id'] }}>Delete</button>
+                                    </form>
                                 </td>
                                 <td scope="row" class="itemTable">{{ $user['email'] }}</td>
                                 <td scope="row" class="itemTable">{{ $user['name'] }}</td>
