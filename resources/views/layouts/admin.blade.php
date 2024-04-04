@@ -19,13 +19,13 @@
                 <div class="col-3 bg-light pe-0 pt-4 sidebar">
                     <ul >
                         <li>
-                            <a href="{{ route('user') }}">Users</a>
+                            <a class="sidebar-item" href="{{ route('user') }}">Users</a>
                         </li>
                         <li>
-                            <a>Categories</a>
+                            <div class="sidebar-item">Categories</div>
                         </li>
                         <li>
-                            <a href="{{ route('product') }}">Products</a>
+                            <a class="sidebar-item" href="{{ route('product') }}">Products</a>
                         </li>
                     </ul>
                 </div>

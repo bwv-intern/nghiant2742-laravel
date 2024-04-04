@@ -19,7 +19,7 @@
     margin-bottom: 3px;
 }
 
-.sidebar a {
+.sidebar .sidebar-item {
     color: black;
     text-decoration: none;
     display: flex;
