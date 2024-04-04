@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use App\Utils\MessageUtil;
@@ -64,8 +65,7 @@ class UserController extends Controller
     }
 
     public function store(StoreUserRequest $request) {
-        $user = $this->userService->handleSaveData($request, 'add');
-        $isSaved = $this->userRepository->store($user);
+        $isSaved = $this->userService->handleSaveData($request, 'add');
         
         if ($isSaved) {
             $msgInfo = MessageUtil::getMessage('infos', 'I013');
@@ -74,4 +74,19 @@ class UserController extends Controller
         return redirect()->back()->withErrors(MessageUtil::getMessage('errors', 'E014'));
     }
 
+    public function show(string $id) {
+        $user = $this->userRepository->getById($id);
+        return view('screens.user.edit')->with('user', $user);
+    }
+
+    public function update(string $id, UpdateUserRequest $request) {
+        $request['id'] = $id;
+        $isSaved = $this->userService->handleSaveData($request, 'update');
+        
+        if ($isSaved) {
+            $msgInfo = MessageUtil::getMessage('infos', 'I013');
+            return redirect()->route('user')->with('msgInfo', $msgInfo);
+        }
+        return redirect()->back()->withErrors(MessageUtil::getMessage('errors', 'E014'));
+    }
 }

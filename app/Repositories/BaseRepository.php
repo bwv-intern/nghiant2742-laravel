@@ -51,7 +51,11 @@ class BaseRepository implements BaseRepositoryInterface
      * @return bool|null
      */
     public function delete($id): ?bool {
-        return $this->getById($id)->delete();
+        return DB::transaction(function () use ($id) {
+            $this->getById($id)->delete();
+            return true;
+        });
+        return false;
     }
 
     /**
@@ -76,6 +80,10 @@ class BaseRepository implements BaseRepositoryInterface
      * @return bool
      */
     public function update($id, array $data): bool {
-        return $this->getById($id)->update($data);
+        return DB::transaction(function () use ($id, $data) {
+            $this->getById($id)->update($data);
+            return true;
+        });
+        return false;
     }
 }

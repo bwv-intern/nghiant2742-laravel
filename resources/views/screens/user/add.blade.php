@@ -23,7 +23,7 @@
 
                     <x-input.select labelName='User flag' defaultValue="1" wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement' :options="getArrayUserFlg()"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="dateOfBirth" id="dateOfBirth" value="{{ old('dateOfBirth') }}"/>
+                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth') }}"/>
                     
                     <x-input.textarea labelName='Address' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="textarea" name="address" id="address" value="{{ old('address')}}" rows="4"/>
 
@@ -38,10 +38,10 @@
                     
                 </div>
                 <div class="col-12 d-flex gap-2 justify-content-center">
-                    <x-button.submit buttonName="Add" class="btn-custom btnSubmit"/>
+                    <x-button.submit buttonName="Add" class="btn-custom"/>
                 </div>
             </div>
         </form>
    </div>
 @stop
-@vite(['resources/js/screens/user.js'])
+@vite(['resources/js/screens/user/add.js'])

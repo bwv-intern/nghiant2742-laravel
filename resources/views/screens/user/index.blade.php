@@ -21,7 +21,7 @@
 
                     <x-input.checkbox labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement-checkbox' :options="isCheckedBox(Session::get('userQueryParams')['user_flg'] ?? null)"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="dateOfBirth" id="dateOfBirth" value="{{ Session::get('userQueryParams')['dateOfBirth'] ?? '' }}"/>
+                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
                     
                 </div>
                 
@@ -59,7 +59,7 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td scope="row">
-                                    <button class="btn btn-primary">Edit</button>
+                                    <a class="btn btn-primary" href="{{ route('user.edit', $user['id']) }}">Edit</a>
                                     <button class="btn btn-danger">Delete</button>
                                 </td>
                                 <td scope="row" class="itemTable">{{ $user['email'] }}</td>
@@ -75,4 +75,4 @@
             </div>
     @endif
 @stop
-@vite(['resources/js/screens/user.js'])
+@vite(['resources/js/screens/user/search.js'])

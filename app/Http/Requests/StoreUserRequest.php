@@ -50,7 +50,7 @@ class StoreUserRequest extends FormRequest
             'password.same' => MessageUtil::getMessage('errors', 'E011'),
             're_password.required' => MessageUtil::getMessage('errors', 'E011', ['Password']),
             'phone.numeric' => MessageUtil::getMessage('errors', 'E012', ['Phone','number']),
-            'dateOfBirth.date_format' => MessageUtil::getMessage('errors', 'E012', ['Date','Y-m-d']),
+            'date_of_birth.date_format' => MessageUtil::getMessage('errors', 'E012', ['Date','Y-m-d']),
         ];
     }
 }

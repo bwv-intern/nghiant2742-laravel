@@ -35,8 +35,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         if (isset($queryParams['name'])) {
             $users = $users->where('name', 'LIKE', "%" . $queryParams['name'] . "%");
         }
-        if (isset($queryParams['dateOfBirth'])) {
-            $users = $users->where('date_of_birth', $queryParams['dateOfBirth']);
+        if (isset($queryParams['date_of_birth'])) {
+            $users = $users->where('date_of_birth', $queryParams['date_of_birth']);
         }
         if (isset($queryParams['phone'])) {
             $users = $users->where('phone', $queryParams['phone']);
