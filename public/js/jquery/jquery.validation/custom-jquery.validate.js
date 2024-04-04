@@ -42,7 +42,7 @@ $.extend( $.validator, {
 		dateISO: "Please enter a valid date (ISO).",
 		number: getMsgError('errors', 'E012', "{0}", "{1}"),
 		digits: "Please enter only digits.",
-		equalTo: "Please enter the same value again.",
+		equalTo: getMsgError('errors', 'E011'),
 		maxlength: function(param, element) {
 			return getMsgError('errors', 'E002', capitalizeFirstLetter($(element).attr('name')), param, element.value.length);
 		},
