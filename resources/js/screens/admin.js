@@ -2,7 +2,7 @@ $(function () {
     const currentURL = window.location.pathname;
     $('.sidebar a').each(function() {
         const url = this.pathname;
-        if (currentURL === url) {
+        if (currentURL.includes(url)) {
             $(this).addClass('activeItem');
         }
     });
