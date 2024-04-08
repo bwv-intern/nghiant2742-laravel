@@ -1,6 +1,6 @@
 const messages = {
     errors: {
-        E001: "{0} is required field.",
+        E001: " * {0} is required field.",
         E002: "{0} must be less than {1} characters. (Currently {2} characters)",
         E003: "{0} must be more than {1} characters. (Currently {2} characters)",
         E004: "Please enter your email address correctly.",
