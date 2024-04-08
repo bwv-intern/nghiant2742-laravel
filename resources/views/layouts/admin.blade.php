@@ -8,7 +8,7 @@
 
         {{-- BS5 --}}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        @vite(['resources/css/app.css', 'resources/css/screens/admin.css'])
+        @vite(['resources/css/app.css', 'resources/css/layouts/admin.css'])
     </head>
     <body>
         
@@ -50,6 +50,6 @@
         <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/custom-jquery.validate.js') }}"></script>
-        @vite(['resources/js/app.js', 'resources/js/screens/admin.js'])
+        @vite(['resources/js/app.js', 'resources/js/layouts/admin.js'])
     </body>
 </html>

@@ -102,3 +102,7 @@ label[id*='-error'] {
     }
   }
   
+.btnDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

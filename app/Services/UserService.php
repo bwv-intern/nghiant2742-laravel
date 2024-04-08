@@ -2,15 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Interfaces\UserRepositoryInterface;
 use App\Utils\ConstUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+    private UserRepositoryInterface $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository) {
+        $this->userRepository = $userRepository;
+    }
+
     // Declare the function as static
     public static function getValueCheckbox()
     {
@@ -48,6 +52,7 @@ class UserService
     {
         $input = $request->all();
         $data = [
+            'email' => $input['email'],
             'name' => $input['name'],
             'user_flg' => $input['user_flg'],
             'phone' => $input['phone'],
@@ -55,23 +60,17 @@ class UserService
             'date_of_birth' => $input['date_of_birth'],
         ];
 
-        $userRepository = new UserRepository(new User);
+        if (!empty($input['password'])) {
+            $data['password'] = Hash::make($input['password']);
+        }
 
         // Only add new user when method = add
         if ($method == 'add') {
-            $data['email'] = $input['email'];
-            $data['password'] = Hash::make($input['password']);
-            return $userRepository->store($data);
+            return $this->userRepository->store('users', $data);
         }
         
         // Get user id need to edit
         $id = $input['id'];
-        $data['email'] = $input['email'];
-
-        if (!empty($input['password'])) {
-            $data['password'] = Hash::make($input['password']);
-        }
-        $r = $userRepository->update($id, $data);
-        return $r;
+        return $this->userRepository->update('users', $id, $data);
     }
 }

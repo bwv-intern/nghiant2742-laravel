@@ -1,4 +1,4 @@
-import { initOverlay } from "../../common";
+import { initOverlay, getMsg } from "../../common";
 
 $(function() {
     // Validate search form before submitting
@@ -19,19 +19,18 @@ $(function() {
         },
         submitHandler: function(form) {
             let $form = $(form);
-            if ($(form).valid()) {
-                // Filter to remove empty input
-                let $validInputs = $form.find(':input').filter(function() {
-                    return $.trim($(this).val()) !== '';
-                });
-                $form.find(':input').not($validInputs).attr('disabled', true);
+            // Filter to remove empty input
+            let $validInputs = $form.find(':input').filter(function() {
+                return $.trim($(this).val()) !== '';
+            });
+            $form.find(':input').not($validInputs).attr('disabled', true);
+            $form.find(':submit').prop('disabled', true).addClass('btnDisabled');
 
-                // init overlay
-                initOverlay()
-                // alert('Stop')
-                $form.trigger( "submit" );
-            }
-        } 
+            // init overlay
+            initOverlay()
+            // alert('Stop')
+            $form.trigger( "submit" );
+        }
     });
 
     // Handle event clear search form
@@ -53,7 +52,7 @@ $(function() {
         
         var id = $(this).data('id');
         
-        let isConfirm = confirm(`Are you sure you want to delete the record with id ${id}?`);
+        let isConfirm = confirm(getMsg('infors', 'I018', id));
         
         if (isConfirm) {
             $('#deleteForm_' + id).submit();

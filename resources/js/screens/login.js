@@ -20,14 +20,11 @@ $(function () {
                 validator.errorList[0].element.focus();
             }
         },
-        submitHandler: function(form) {
-            var $form = $(form);
-            if ($(form).valid()) {
-                // Init overlay
-                initOverlay()
-                $form.trigger( "submit" );
-            }
-        } 
+        submitHandler: function (form) {
+            $(form).find(':submit').prop('disabled', true).addClass('btnDisabled');
+            initOverlay();
+            $(form).trigger("submit");
+        },
     });
 
 
