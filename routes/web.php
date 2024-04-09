@@ -35,11 +35,14 @@ Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
         Route::get('admin/user/add', [UserController::class, 'create'])->name('user.add');
         Route::post('admin/user/add', [UserController::class, 'store'])->name('user.store');
         Route::get('users/export', [UserController::class, 'exportCSV'])->name('user.export');
-        Route::get('admin/user/{id}', [UserController::class, 'show']);
-        Route::put('admin/user/{id}', [UserController::class, 'update']);
+        Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.edit');
+        Route::put('admin/user/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('admin/user/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
 
     Route::group(['middleware' => ['checkRole:0,2']], function () {
         Route::get('admin/product', [ProductController::class, 'index'])->name('product');
     });
+
+    
 });

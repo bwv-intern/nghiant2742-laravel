@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = Auth::user();
             Session::put('user', $user);
-            return redirect()->intended('admin');
+            return redirect()->route('admin');
         }
 
         // Get error message for error code 'E010'

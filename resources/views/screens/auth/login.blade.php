@@ -13,8 +13,8 @@
 
         <form action="{{ route('login') }}" method="post" id="loginForm">
             @csrf
-            <x-input.common inputStyle="group-input" type="email" labelName="Email" name="email" id="email" value="{{ old('email') }}" />
-            <x-input.common inputStyle="group-input" type="password" labelName="Password" name="password" id="password" value="{{ old('password') }}"/>
+            <x-input.common inputStyle="group-input" require="true" type="email" labelName="Email" name="email" id="email" value="{{ old('email') }}" />
+            <x-input.common inputStyle="group-input" require="true" type="password" labelName="Password" name="password" id="password" value="{{ old('password') }}"/>
             <x-button.submit id="btnLogin" buttonName="Login" class="btnSubmit"/>
         </form>
    </div>

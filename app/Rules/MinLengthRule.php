@@ -36,7 +36,7 @@ class MinLengthRule implements ValidationRule
         $isLarger = $this->currNumber >= $this->maxNumber;
 
         if(!$isLarger){
-            $fail(MessageUtil::getMessage('errors', 'E003', [':attribute', $this->maxNumber, $this->currNumber]) );
+            $fail(MessageUtil::getMessage('errors', 'E003', [ucfirst($attribute), $this->maxNumber, $this->currNumber]) );
         }
     }
 
