@@ -18,13 +18,13 @@
 #loginForm div {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 15px;
     width: 100%;
     margin-bottom: 15px;
 }
 
 #loginForm label {
-    min-width: 60px;
+    min-width: 75px;
 }
 
 .group-input {

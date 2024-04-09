@@ -8,6 +8,10 @@ label[id*='-error'] {
     color: red;
 }
 
+.required {
+  color: red;
+}
+
 .toastMsg {
     position: fixed;
     top: 30px;
