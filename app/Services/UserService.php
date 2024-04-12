@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Utils\ConstUtil;
+use App\Utils\MessageUtil;
 use DebugBar\DebugBar;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserService
 {
@@ -37,5 +39,38 @@ class UserService
         }
 
         return $options;
+    }
+
+    public static function handleImport($file) {
+
+        $rows = Excel::toCollection([], $file);
+        
+        $data = $rows->first();
+
+        // Verify header
+        $expectedHeader = ["User ID", "Email", "Password", "User Flag", "Date Of Birth", "Name"];
+        $header = $data->first()->toArray();
+
+
+        if ($header !== $expectedHeader) {
+            return [
+                'error' => true,
+                'msg' => MessageUtil::getMessage('errors', 'E008')
+            ];
+        }
+
+       $lengthData = count($rows->first()->toArray());
+
+        if ($lengthData <= 1) {
+            return [
+                'error' => true,
+                'msg' => 'Your file is empty'
+            ];
+        }
+
+        return [
+            'error' => false,
+            'msg' => "File ok"
+        ];
     }
 }

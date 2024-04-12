@@ -3,12 +3,6 @@
 @section('title', 'Admin')
 
 @section('content')
-    @if ($errors->any())
-        <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
-    @endif
-    @if (isset($msgInfo))
-        <x-toast msg="{{$msgInfo}}" type="info"/>
-    @endif
     <div class="breadscrumb">
         <a href="{{ route('admin') }}">Top</a> > 
         <a class="breadscrumb-active" disabled="disabled">Users</a>
@@ -40,6 +34,9 @@
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom"/>
                     <x-button.submit id="btnClear" name="clearForm" buttonName="Clear" class="btn-custom"/>
                     <a class="btn-custom" href="{{ route('user.export') }}">Export CSV</a>
+                    <button type="button" class="btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Import CSV
+                      </button>
                 </div>
             </div>
         </form>
@@ -81,6 +78,30 @@
             </div>
     @endif
    
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Import CSV</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{{ route('user.import') }}" method="post" enctype="multipart/form-data" id="importForm">
+                @csrf
+                <div class="text-left d-flex flex-column">
+                    <input type="file" name="csv_file" class="" id="customFile">
+                    
+                </div>
+                <div class="modal-footer" style="border-top: none">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
-@vite(['resources/js/screens/user.js'])
+<script src="{{ asset('js/jquery/jquery.validation/additional-methods.min.js') }}"></script>
+@vite(['resources/js/screens/user.js', 'resources/js/screens/user/import.js'])

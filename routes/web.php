@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
         Route::get('admin/user/add', [UserController::class, 'create'])->name('user.add');
         Route::post('admin/user/add', [UserController::class, 'store']);
         Route::get('users/export', [UserController::class, 'exportCSV'])->name('user.export');
+        Route::post('users/import', [UserController::class, 'importCSV'])->name('user.import');
         Route::get('admin/user/{id}', [UserController::class, 'show']);
         Route::put('admin/user/{id}', [UserController::class, 'update']);
     });
