@@ -32,16 +32,18 @@ Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
 
     Route::group(['middleware' => ['checkRole:0']], function () {
         Route::get('admin/user', [UserController::class, 'index'])->name('user');
-        Route::post('admin/user/clear', [UserController::class, 'clear'])->name('user.clear');
         Route::get('admin/user/add', [UserController::class, 'create'])->name('user.add');
-        Route::post('admin/user/add', [UserController::class, 'store']);
+        Route::post('admin/user/add', [UserController::class, 'store'])->name('user.store');
         Route::get('users/export', [UserController::class, 'exportCSV'])->name('user.export');
+        Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.edit');
+        Route::put('admin/user/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('admin/user/{id}', [UserController::class, 'delete'])->name('user.delete');
         Route::post('users/import', [UserController::class, 'importCSV'])->name('user.import');
-        Route::get('admin/user/{id}', [UserController::class, 'show']);
-        Route::put('admin/user/{id}', [UserController::class, 'update']);
     });
 
     Route::group(['middleware' => ['checkRole:0,2']], function () {
         Route::get('admin/product', [ProductController::class, 'index'])->name('product');
     });
+
+    
 });

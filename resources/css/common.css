@@ -4,7 +4,12 @@
 }
 
 label[id*='-error'] {
+    display: block;
     color: red;
+}
+
+.required {
+  color: red;
 }
 
 .toastMsg {
@@ -15,22 +20,93 @@ label[id*='-error'] {
     text-align: center;
 }
 
-.loader {
-    width: 16px;
-    height: 16px;
-    border: 5px solid #FFF;
-    border-bottom-color: #21b0fd;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    }
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
 
-    @keyframes rotation {
+#overlay_body{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+.loader {
+    animation: rotate 1s infinite;
+    height: 50px;
+    width: 50px;
+  }
+
+  .loader:before,
+  .loader:after {
+    border-radius: 50%;
+    content: "";
+    display: block;
+    height: 20px;
+    width: 20px;
+  }
+  .loader:before {
+    animation: ball1 1s infinite;
+    background-color: #fff;
+    box-shadow: 30px 0 0 #07b92e;
+    margin-bottom: 10px;
+  }
+  .loader:after {
+    animation: ball2 1s infinite;
+    background-color: #07b92e;
+    box-shadow: 30px 0 0 #fff;
+  }
+
+  @keyframes rotate {
+    0% { transform: rotate(0deg) scale(0.8) }
+    50% { transform: rotate(360deg) scale(1.2) }
+    100% { transform: rotate(720deg) scale(0.8) }
+  }
+
+  @keyframes ball1 {
     0% {
-        transform: rotate(0deg);
+      box-shadow: 30px 0 0 #07b92e;
+    }
+    50% {
+      box-shadow: 0 0 0 #07b92e;
+      margin-bottom: 0;
+      transform: translate(15px, 15px);
     }
     100% {
-        transform: rotate(360deg);
+      box-shadow: 30px 0 0 #07b92e;
+      margin-bottom: 10px;
     }
-} 
+  }
+
+  @keyframes ball2 {
+    0% {
+      box-shadow: 30px 0 0 #fff;
+    }
+    50% {
+      box-shadow: 0 0 0 #fff;
+      margin-top: -20px;
+      transform: translate(15px, 15px);
+    }
+    100% {
+      box-shadow: 30px 0 0 #fff;
+      margin-top: 0;
+    }
+  }
+  
+.btnDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

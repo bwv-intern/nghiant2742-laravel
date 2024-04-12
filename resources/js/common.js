@@ -1,6 +1,10 @@
-export const messages = {
+export function initOverlay(){
+    $('#overlay').css('display', 'block')
+}
+
+const messages = {
     errors: {
-        E001: "{0} is required field.",
+        E001: "*{0} is required field.",
         E002: "{0} must be less than {1} characters. (Currently {2} characters)",
         E003: "{0} must be more than {1} characters. (Currently {2} characters)",
         E004: "Please enter your email address correctly.",
@@ -23,15 +27,7 @@ export const messages = {
     }
 }
 
-export function getMsgError(state, code, x = "", y = "", z = ""){
+export function getMsg(state, code, x = "", y = "", z = ""){
     const message = messages[state][code];
     return message.replace(/\{0\}/g, x).replace(/\{1\}/g, y).replace(/\{2\}/g, z);
 }
-
-$(function() {
-    $('form').submit(function (e) { 
-        let buttonName = $('.btnSubmit').text();
-        $('.btnSubmit').html(`<span class="loader"></span>${buttonName}`)
-        $('.btnSubmit').attr('disabled', true)
-    });
-})

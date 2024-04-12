@@ -3,8 +3,12 @@
 namespace App\Repositories;
 
 use App\Interfaces\BaseRepositoryInterface;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BaseRepository implements BaseRepositoryInterface 
 {
@@ -50,27 +54,43 @@ class BaseRepository implements BaseRepositoryInterface
      * @return bool|null
      */
     public function delete($id): ?bool {
-        return $this->getById($id)->delete();
+        return DB::transaction(function () use ($id) {
+            $this->getById($id)->delete();
+            return true;
+        });
+        return false;
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param array $data
-     * @return Model
+     * @return bool
      */
-    public function store(array $data): Model {
-        return $this->model->create($data);
+    public function store($table, array $data): bool {
+        return DB::transaction(function () use ($table, $data) {
+            $data['created_by'] = Auth::id();
+            $data['created_at'] = Carbon::now();
+            $data['updated_at'] = Carbon::now();
+            DB::table($table)->insert($data);
+            return true;
+        });
+        return false;
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a record by its primary key.
      *
      * @param int $id
      * @param array $data
      * @return bool
      */
-    public function update($id, array $data): bool {
-        return $this->getById($id)->update($data);
+    public function update($table, $id, array $data): bool {
+        return DB::transaction(function () use ($table, $id, $data) {
+            $data['updated_by'] = Auth::id();
+            $data['updated_at'] = Carbon::now();
+            return DB::table($table)->where('id', $id)->update($data);
+        });
+
     }
 }

@@ -8,7 +8,7 @@
 
         {{-- BS5 --}}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        @vite(['resources/css/app.css', 'resources/css/screens/admin.css'])
+        @vite(['resources/css/app.css', 'resources/css/layouts/admin.css'])
     </head>
     <body>
         
@@ -19,13 +19,13 @@
                 <div class="col-3 bg-light pe-0 pt-4 sidebar">
                     <ul >
                         <li>
-                            <a href="{{ route('user') }}">Users</a>
+                            <a class="sidebar-item" href="{{ route('user') }}">Users</a>
                         </li>
                         <li>
-                            <a>Categories</a>
+                            <div class="sidebar-item">Categories</div>
                         </li>
                         <li>
-                            <a href="{{ route('product') }}">Products</a>
+                            <a class="sidebar-item" href="{{ route('product') }}">Products</a>
                         </li>
                     </ul>
                 </div>
@@ -41,11 +41,16 @@
             </div>
 
         </div>
+        <div id="overlay">
+            <div id="overlay_body">
+                <div class="loader"></div>  
+            </div>
+        </div>
 
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/custom-jquery.validate.js') }}"></script>
-        @vite(['resources/js/app.js', 'resources/js/screens/admin.js'])
+        @vite(['resources/js/app.js', 'resources/js/layouts/admin.js'])
     </body>
 </html>

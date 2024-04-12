@@ -1,18 +1,3 @@
-{{-- @props(['users']) --}}
-{{-- <div class="d-flex justify-content-between align-items-end mt-5 mb-2">
-    <label>Showing 1 to 10 of {{ count($users) }} entries</label>
-    <form class="d-flex gap-1" action="{{ route('user') }}" method="GET" id="paginationForm">
-        <button class="btn btn-light border" type="submit" data-page="1">First</button>
-        <button class="btn btn-light border" type="submit" data-page="1"><</button>
-        <button class="btn btn-light border" type="submit" data-page="1">1</button>
-        <button class="btn btn-light border" type="submit" data-page="2">2</button>
-        <button class="btn btn-light border" type="submit" data-page="3">3</button>
-        <button class="btn btn-light border" type="submit" data-page="4">4</button>
-        <button class="btn btn-light border" type="submit" data-page="1">></button>
-        <button class="btn btn-light border" type="submit" data-page="10">Last</button>
-    </form>
-</div> --}}
-
 @if ($paginator->hasPages())
     <nav class="d-flex justify-content-between align-items-end mt-5 mb-2">
         <label>Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} entries</label>

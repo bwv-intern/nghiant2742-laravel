@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Admin')
+@vite(['resources/css/screens/user.css'])
 
 @section('content')
     <div class="breadscrumb">
@@ -9,7 +10,7 @@
     </div>
     <div class="wrapper">
         <div class="d-flex justify-content-between mb-5">
-            <label class="title">USERS SEARCH</label>
+            <label class="title">User search</label>
             <a class="btn btn-primary btnAddUser" href="{{ route('user.add') }}">Add user</a>
         </div>
         
@@ -20,7 +21,7 @@
 
                     <x-input.checkbox labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement-checkbox' :options="isCheckedBox(Session::get('userQueryParams')['user_flg'] ?? null)"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="dateOfBirth" id="dateOfBirth" value="{{ Session::get('userQueryParams')['dateOfBirth'] ?? '' }}"/>
+                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
                     
                 </div>
                 
@@ -32,7 +33,7 @@
                 </div>
                 <div class="col-12 d-flex gap-2 justify-content-end">
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom"/>
-                    <x-button.submit id="btnClear" name="clearForm" buttonName="Clear" class="btn-custom"/>
+                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom" value="true"/>
                     <a class="btn-custom" href="{{ route('user.export') }}">Export CSV</a>
                     <button type="button" class="btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Import CSV
@@ -42,8 +43,7 @@
         </form>
    </div>
    @if (count($users)!==0)
-    <div class="wrapper">
-            {{-- <x-paginateCustom :users="$users"/> --}}
+
             {{ $users->links('components.paginateCustom') }}
             {{-- Table of users --}}
                 <table class="table table-striped table-bordered">
@@ -62,8 +62,12 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td scope="row">
-                                    <button class="btn btn-primary">Edit</button>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <a class="btn btn-primary" href="{{ route('user.edit', $user['id']) }}">Edit</a>
+                                    <form id="deleteForm_{{ $user['id'] }}" action="{{ route('user.delete', $user['id']) }}" method="post" class="d-inline">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-danger deleteBtn" data-id={{ $user['id'] }}>Delete</button>
+                                    </form>
                                 </td>
                                 <td scope="row" class="itemTable">{{ $user['email'] }}</td>
                                 <td scope="row" class="itemTable">{{ $user['name'] }}</td>
@@ -105,3 +109,4 @@
 @stop
 <script src="{{ asset('js/jquery/jquery.validation/additional-methods.min.js') }}"></script>
 @vite(['resources/js/screens/user.js', 'resources/js/screens/user/import.js'])
+@vite(['resources/js/screens/user/search.js'])

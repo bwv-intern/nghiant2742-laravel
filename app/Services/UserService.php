@@ -2,13 +2,22 @@
 
 namespace App\Services;
 
+use App\Interfaces\UserRepositoryInterface;
 use App\Utils\ConstUtil;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Utils\MessageUtil;
 use DebugBar\DebugBar;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserService
 {
+    private UserRepositoryInterface $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository) {
+        $this->userRepository = $userRepository;
+    }
+
     // Declare the function as static
     public static function getValueCheckbox()
     {
@@ -39,6 +48,33 @@ class UserService
         }
 
         return $options;
+    }
+
+    // Handle input of add/update to return array of input data
+    public function handleSaveData(Request $request, $method = '')
+    {
+        $input = $request->all();
+        $data = [
+            'email' => $input['email'],
+            'name' => $input['name'],
+            'user_flg' => $input['user_flg'],
+            'phone' => $input['phone'],
+            'address' => $input['address'],
+            'date_of_birth' => $input['date_of_birth'],
+        ];
+
+        if (!empty($input['password'])) {
+            $data['password'] = Hash::make($input['password']);
+        }
+
+        // Only add new user when method = add
+        if ($method == 'add') {
+            return $this->userRepository->store('users', $data);
+        }
+        
+        // Get user id need to edit
+        $id = $input['id'];
+        return $this->userRepository->update('users', $id, $data);
     }
 
     public static function handleImport($file) {
