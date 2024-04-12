@@ -4,9 +4,11 @@ namespace App\Imports;
 
 use App\Models\User;
 use App\Rules\EmailRule;
+use App\Rules\UserIdExistsRule;
 use App\Utils\MessageUtil;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -19,11 +21,13 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkReading, WithUpserts, WithBatchInserts
 {
     protected $rowNum = 1;
+    protected $userId;
 
     public function model(array $row) {
 
         ++$this->rowNum;
         $userId = $row['user_id'];
+        $this->$userId = $userId;
         $password = $row['password'];
         $isBcryptHash = preg_match('/^\$2y\$/', $password);
         if (!$isBcryptHash) {
@@ -40,7 +44,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
             // Find user
             $user = User::find($userId);
             if (!$user) {
-                $error = ['0' => "User ID not found"];
+                $error = ['0' => MessageUtil::getMessage('errors', 'E015', ['User ID'])];
                 $failures[] = new Failure($this->rowNum, 'User ID', $error, $row);
                 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(
@@ -49,16 +53,29 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
                 );
             }
 
-            // Update user
-            $user->id = $userId;
-            $user->email = $email;
-            $user->password = $password;
-            $user->user_flg = $userFlg;
-            $user->date_of_birth = $dateOfBirth;
-            $user->name = $name;
-            $user->updated_by = Auth::id();
-            $user->updated_at = Carbon::now();
-            $user->save();
+            $existsEmail = User::where('email', $email)->exists();
+
+            if ($user->email !== $email && $existsEmail) {
+                $error = ['0' => MessageUtil::getMessage('errors', 'E009', ['Email'])];
+                $failures[] = new Failure($this->rowNum, 'User ID', $error, $row);
+                throw new \Maatwebsite\Excel\Validators\ValidationException(
+                    \Illuminate\Validation\ValidationException::withMessages($error),
+                    $failures
+                );
+            }
+
+            $data =[
+                'email' => $email,
+                'password' => $password,
+                'user_flg' => $userFlg,
+                'date_of_birth' => $dateOfBirth,
+                'name' => $name,
+                'updated_by' => Auth::id(),
+                'updated_at' => now(),
+            ];
+            
+            DB::table('users')->where('id', $userId)->update($data);
+            
             return null;
 
         } else {
@@ -87,7 +104,11 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
             ],
             'name' => 'max:50|required',
             'password' => 'required',
-            'user_id' => 'nullable|numeric',
+            'user_id' => [
+                'nullable',
+                'numeric',
+                new UserIdExistsRule
+            ],
             'user_flag' => 'in:0,1,2|required',
             'date_of_birth' => 'date_format:Y-m-d',
         ];
@@ -98,6 +119,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     public function customValidationMessages() {
         return [
             'email.required' => MessageUtil::getMessage('errors', 'E001', ['Email']),
+            'email.unique' => MessageUtil::getMessage('errors', 'E009', ['Email']),
             'name.required' => MessageUtil::getMessage('errors', 'E001', ['Name']),
             'password.required' => MessageUtil::getMessage('errors', 'E001', ['Password']),
             'user_flag.required' => MessageUtil::getMessage('errors', 'E001', ['User flag']),
@@ -115,8 +137,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
         return ['email', 'id'];
     }
 
-    public function batchSize(): int
-    {
+    public function batchSize(): int {
         return 1000;
     }
 }
