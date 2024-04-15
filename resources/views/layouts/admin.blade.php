@@ -13,10 +13,11 @@
     <body>
         
         @include('partial.navbar')
-        
+        <div class="btnSidebar btn btn-primary d-inline-block d-lg-none">></div>
         <div class="containerAdmin">
             <div class="row gx-0">
-                <div class="col-3 bg-light pe-0 pt-4 sidebar">
+                <div class="d-none d-lg-block col-3 bg-light pe-0 pt-4 sidebar">
+                    <div class="btnSidebar-close btn btn-primary mb-2 d-lg-none"><</div>
                     <ul >
                         <li>
                             <a class="sidebar-item" href="{{ route('user') }}">Users</a>
@@ -29,7 +30,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-9 contentAdmin">
+                <div class="col-12 col-lg-9 contentAdmin">
                     @if ($errors->any())
                         <x-toast msg="{{ $errors->all()[0] }}" type="danger"/>
                     @endif

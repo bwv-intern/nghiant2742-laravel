@@ -18,6 +18,7 @@ label[id*='-error'] {
     left: 35%;
     min-width: 30vw;
     text-align: center;
+    z-index: 99;
 }
 
 #overlay {

@@ -11,4 +11,12 @@ $(function () {
         e.preventDefault();
         window.location.href = '/admin';
     });
+
+    $('.btnSidebar').on("click", function (e) {
+        $('.sidebar').removeClass("d-none");
+    });
+
+    $('.btnSidebar-close').on("click", function (e) {
+        $('.sidebar').addClass("d-none");
+    });
 });

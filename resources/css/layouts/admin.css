@@ -68,3 +68,23 @@
     font-size: 36px;
     font-weight: bold;
 }
+
+.btnSidebar {
+    border-radius: 0px;
+}
+  
+.btnSidebar-close {
+    border-radius: 0px;
+}
+
+@media only screen and (max-width: 921px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+    }
+    .wrapper {
+        padding: 10px 5px;
+    }
+}

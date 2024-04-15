@@ -1,6 +1,8 @@
 /* USER */
 .inputUserElement {
-    display: flex;
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
 }
 
 #userSearchForm input[id="phone"]{
@@ -9,10 +11,6 @@
 
 .btnAddUser {
     height: fit-content;
-}
-
-.inputUserElement {
-    margin-bottom: 40px;
 }
 
 .inputUserElement-checkbox {
@@ -47,6 +45,24 @@ a[class="btn-custom"]:hover {
 }
 
 #address {
-    resize: none;
+    width: 50vw;
     min-width: 180px;
+}
+
+.inputUserElement select {
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rowInput {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 921px) {
+    .rowInput {
+        display: block;
+    }
 }

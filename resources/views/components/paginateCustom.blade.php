@@ -1,7 +1,7 @@
 @if ($paginator->hasPages())
-    <nav class="d-flex justify-content-between align-items-end mt-5 mb-2">
-        <label>Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} entries</label>
-        <ul class="pagination d-flex gap-1">
+    <nav class="d-flex flex-wrap col-9 justify-content-between align-items-end mt-5 mb-2">
+        <label class="col-12 col-sm-6">Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} entries</label>
+        <ul class="pagination d-flex gap-1 col-12 col-sm-6">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
                 <li class="btn btn-light border disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
