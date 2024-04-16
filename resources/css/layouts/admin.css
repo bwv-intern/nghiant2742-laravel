@@ -26,6 +26,7 @@
     border: 1px solid black;
     padding: 10px;
     width: 100%;
+    border-radius: 0px !important;
 }
 
 .activeItem {
@@ -75,6 +76,13 @@
   
 .btnSidebar-close {
     border-radius: 0px;
+}
+
+.link {
+    padding: 0 !important;
+    vertical-align: baseline !important;
+    line-height: 0;
+    color: #0d6efd;
 }
 
 @media only screen and (max-width: 921px) {

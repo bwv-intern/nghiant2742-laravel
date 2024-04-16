@@ -26,15 +26,16 @@
     margin-top: 20px;
     padding: 5px 30px;
     cursor: pointer;
-    border: 1px solid rgb(144, 144, 144);
+    border: 1px solid rgb(144, 144, 144) !important;
     border-radius: 5px;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
     text-decoration: none;
     color: black;
 }
 
-a[class="btn-custom"]:hover {
+.btn-custom:hover {
     color: black;
+    background-color: #d6d6d6;
 }
 
 .itemTable {

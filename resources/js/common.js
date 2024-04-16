@@ -31,3 +31,11 @@ export function getMsg(state, code, x = "", y = "", z = ""){
     const message = messages[state][code];
     return message.replace(/\{0\}/g, x).replace(/\{1\}/g, y).replace(/\{2\}/g, z);
 }
+
+$(function() {
+    if ($('.toastMsg').length > 0) {
+        setTimeout(function() {
+            $('.toastMsg').addClass('d-none');
+        }, 5000);
+    }
+})

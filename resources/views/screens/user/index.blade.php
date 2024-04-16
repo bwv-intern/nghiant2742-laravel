@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="breadscrumb">
-        <a href="{{ route('admin') }}">Top</a> > 
+        <a class="link" href="{{ route('admin') }}">Top</a> > 
         <a class="breadscrumb-active" disabled="disabled">Users</a>
     </div>
     <div class="wrapper">
@@ -32,10 +32,10 @@
                     
                 </div>
                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
-                    <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom col-12 col-lg-2"/>
-                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom col-12 col-lg-2" value="true"/>
-                    <a class="btn-custom col-12 text-center col-lg-2" href="{{ route('user.export') }}">Export CSV</a>
-                    <x-button.common name="clear" buttonName="Import CSV" class="btn-custom col-12 col-lg-2" data-bs-toggle="modal" data-bs-target="#importModal"/>
+                    <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom btn col-12 col-lg-2"/>
+                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom btn col-12 col-lg-2" value="true"/>
+                    <a class="btn btn-custom col-12 text-center col-lg-2" href="{{ route('user.export') }}" id="btnExport">Export CSV</a>
+                    <x-button.common buttonName="Import CSV" class="btn-custom col-12 col-lg-2" data-bs-toggle="modal" data-bs-target="#importModal"/>
                 </div>
             </div>
         </form>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="modal-footer" style="border-top: none">
                   <x-button.common buttonName="Close" data-bs-dismiss="modal" class="btn btn-secondary"/>
-                  <x-button.submit name="clear" buttonName="Submit" class="btn btn-primary"/>
+                  <x-button.submit buttonName="Submit" class="btn btn-primary"/>
                 </div>
             </form>
         </div>

@@ -1,3 +1,5 @@
+import { initOverlay } from "../../common";
+
 $(function () {
     $("#importForm").validate({
         rules: {
@@ -8,9 +10,13 @@ $(function () {
             }
         },
         submitHandler: function(form) {
-            let $form = $(form);
-            $(form).find(':submit').prop('disabled', true).addClass('btnDisabled');
-            $form.trigger('submit');
+            // init overlay
+            initOverlay()
+            form.submit();
+        },
+        invalidHandler: function(event, validator) {
+            // Khi xảy ra điều kiện không hợp lệ, xóa lớp 'disabled' và 'btnDisabled' từ button submit
+            $(validator.currentForm).find(':submit').prop('disabled', false).removeClass('disabled');
         }
     });
 })

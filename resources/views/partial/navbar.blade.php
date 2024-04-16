@@ -3,6 +3,6 @@
 
     <div>
         <label class="px-4">{{ session('user')->name }}</label>
-        <a href="{{ route('logout') }}">Logout</a>
+        <a class="link" href="{{ route('logout') }}">Logout</a>
     </div>
 </nav>
