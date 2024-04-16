@@ -77,7 +77,15 @@ class UserService
         return $this->userRepository->update('users', $id, $data);
     }
 
-    public static function handleImport($file) {
+    
+    /**
+     * Validate the structure and content of an input Excel file.
+     *
+     * @param string $file The path to the input Excel file.
+     * @return array An array indicating whether the validation passed or failed,
+     *               along with an associated message.
+     */
+    public function validateInputFile($file) {
 
         $rows = Excel::toCollection([], $file);
         

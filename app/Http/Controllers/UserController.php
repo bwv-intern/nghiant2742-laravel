@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Utils\MessageUtil;
 use Illuminate\Http\Request;
 use App\Utils\PaginateUtil;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Validators\ValidationException;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
@@ -161,12 +160,14 @@ class UserController extends Controller
     }
 
     /**
+    * Import users data to CSV format.
+    *
     * @return \Illuminate\Support\Collection
     */
     public function importCSV(ImportRequest $request) 
     {
         $file = $request->file('csv_file');
-        $result = $this->userService->handleImport($file);
+        $result = $this->userService->validateInputFile($file);
         
         if ($result['error']) {
             return redirect()->back()->withErrors(['msg' => $result['msg']]);

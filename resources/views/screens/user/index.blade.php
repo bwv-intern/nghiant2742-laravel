@@ -35,9 +35,7 @@
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom"/>
                     <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom" value="true"/>
                     <a class="btn-custom" href="{{ route('user.export') }}">Export CSV</a>
-                    <button type="button" class="btn-custom" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Import CSV
-                      </button>
+                    <x-button.common id="btnClear" name="clear" buttonName="Import CSV" class="btn-custom" data-bs-toggle="modal" data-bs-target="#importModal"/>
                 </div>
             </div>
         </form>
@@ -83,23 +81,24 @@
     @endif
    
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Import CSV</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="importModalLabel">Import CSV</h5>
+          <x-button.common buttonName="" data-bs-dismiss="modal" class="btn-close" aria-label="Close"/>
         </div>
         <div class="modal-body">
             <form action="{{ route('user.import') }}" method="post" enctype="multipart/form-data" id="importForm">
                 @csrf
                 <div class="text-left d-flex flex-column">
-                    <input type="file" name="csv_file" class="" id="customFile">
+                    {{-- <input type="file" name="csv_file" class="" id="customFile"> --}}
+                    <x-input.common type="file" name="csv_file" class="" id="customFile"/>
                     
                 </div>
                 <div class="modal-footer" style="border-top: none">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <x-button.common buttonName="Close" data-bs-dismiss="modal" class="btn btn-secondary"/>
+                  <x-button.submit name="clear" buttonName="Submit" class="btn btn-primary"/>
                 </div>
             </form>
         </div>
