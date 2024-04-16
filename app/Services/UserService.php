@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use App\Utils\ConstUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Utils\MessageUtil;
-use DebugBar\DebugBar;
+use App\Utils\PaginateUtil;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserService
@@ -116,5 +118,36 @@ class UserService
             'error' => false,
             'msg' => "File ok"
         ];
+    }
+
+    /**
+     * Handle user queries and retrieve paginated user data
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request containing query parameters
+     * @return \Illuminate\Pagination\LengthAwarePaginator The paginated user data
+     */
+    public function handleUserQuery($request) {
+        // Get user query parameters
+        $userQueryParams = $request->all();
+
+        // Retrieve all users
+        $users = $this->userRepository->getAll();
+
+        // Store user query parameters in session
+        if (!empty($userQueryParams)) {
+            Session::put('userQueryParams', $userQueryParams);
+        } else {
+            Session::forget('userQueryParams');
+        }
+
+        // Retrieve users based on search criteria or paginate all users
+        if (Session::has('userQueryParams')) {
+            $users = $this->userRepository->search($userQueryParams);
+            $users = PaginateUtil::paginateModel($users);
+        } else {
+            $users = PaginateUtil::paginateModel(new User);
+        }
+        
+        return $users;
     }
 }

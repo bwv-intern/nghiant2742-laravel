@@ -34,7 +34,7 @@
                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom btn col-12 col-lg-2"/>
                     <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom btn col-12 col-lg-2" value="true"/>
-                    <a class="btn btn-custom col-12 text-center col-lg-2" href="{{ route('user.export') }}" id="btnExport">Export CSV</a>
+                    <x-button.common id="btnExport" data-target="{{ route('user.export') }}" buttonName="Export CSV" class="btn-custom btn col-12 col-lg-2"/>
                     <x-button.common buttonName="Import CSV" class="btn-custom col-12 col-lg-2" data-bs-toggle="modal" data-bs-target="#importModal"/>
                 </div>
             </div>
@@ -107,6 +107,4 @@
     </div>
   </div>
 @stop
-<script src="{{ asset('js/jquery/jquery.validation/additional-methods.min.js') }}"></script>
-@vite(['resources/js/screens/user.js', 'resources/js/screens/user/import.js'])
-@vite(['resources/js/screens/user/search.js'])
+@vite(['resources/js/screens/user/search.js', 'resources/js/screens/user/import.js', 'resources/js/screens/user/export.js'])

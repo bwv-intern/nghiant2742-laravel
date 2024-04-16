@@ -21,6 +21,7 @@ $(function() {
             let errors = validator.numberOfInvalids();
             if (errors) {                    
                 validator.errorList[0].element.focus();
+                $('.btn').removeClass('disabled');
             }
         },
         submitHandler: function(form) {
@@ -30,7 +31,7 @@ $(function() {
                 return $.trim($(this).val()) !== '';
             });
             $form.find(':input').not($validInputs).attr('disabled', true);
-            $form.find(':submit').prop('disabled', true).addClass('btnDisabled');
+            $form.find(':submit').prop('disabled', true).addClass('disabled');
 
             // init overlay
             initOverlay()
@@ -68,24 +69,4 @@ $(function() {
         }
     });
 
-    $('#btnExport').on('click', function() {
-        const url = $(this).attr('href');
-        // init overlay
-        initOverlay()
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function(data) {
-                if (data) {
-                    // Remove class 'disabled' from 'a' with id='btnExport'
-                    $('#btnExport').removeClass("disabled");
-                    // Close loading
-                    $('#overlay').css('display', 'none')
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
-        });
-    })
 })

@@ -8,10 +8,8 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\ImportRequest;
 use App\Imports\UsersImport;
 use App\Interfaces\UserRepositoryInterface;
-use App\Models\User;
 use App\Utils\MessageUtil;
 use Illuminate\Http\Request;
-use App\Utils\PaginateUtil;
 use Maatwebsite\Excel\Validators\ValidationException;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
@@ -34,32 +32,14 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request) {
-        // Get user query parameters
-        $userQueryParams = $request->all();
-
-        // Retrieve all users
-        $users = $this->userRepository->getAll();
-
         // Check if 'clear' parameter is set to clear session data
-        if (!empty($userQueryParams['clear'])) {
+        $isClear = $request->query('clear');
+        if ($isClear) {
             Session::forget('userQueryParams');
             return redirect()->route('user');
         }
 
-        // Store user query parameters in session
-        if (!empty($userQueryParams)) {
-            Session::put('userQueryParams', $userQueryParams);
-        } else {
-            Session::forget('userQueryParams');
-        }
-
-        // Retrieve users based on search criteria or paginate all users
-        if (Session::has('userQueryParams')) {
-            $users = $this->userRepository->search($userQueryParams);
-            $users = PaginateUtil::paginateModel($users);
-        } else {
-            $users = PaginateUtil::paginateModel(new User);
-        }
+        $users = $this->userService->handleUserQuery($request);
 
         // If no users found, display an info message
         if (count($users) === 0) {
@@ -74,9 +54,17 @@ class UserController extends Controller
     /**
      * Export users data to CSV format.
      *
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function exportCSV() {
+    public function exportCSV(Request $request) {
+        $users = $this->userService->handleUserQuery($request);
+        // If no users found, display an info message
+        if (count($users) === 0) {
+            $msgInfo = MessageUtil::getMessage('infos', 'I005');
+            return redirect()->route('user', $request->all())->with('msgInfo', $msgInfo);
+        }
+
         $fileName = date('YmdHis') . '_user.csv';
         return Excel::download(new UsersExport, $fileName);
     }
