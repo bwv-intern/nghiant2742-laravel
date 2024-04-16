@@ -65,7 +65,7 @@
                                     <form id="deleteForm_{{ $user['id'] }}" action="{{ route('user.delete', $user['id']) }}" method="post" class="d-inline">
                                         @csrf
                                         @method('delete')
-                                        <x-button.submit buttonName="Delete" class="btn btn-danger deleteBtn" data-id={{ $user['id'] }}/>
+                                        <x-button.submit buttonName="Delete" class="btn btn-danger deleteBtn" data-id="{{ $user['id'] }}" />
                                     </form>
                                 </td>
                                 <td scope="row" class="itemTable">{{ $user['email'] }}</td>
