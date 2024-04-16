@@ -56,9 +56,13 @@ a[class="btn-custom"]:hover {
     text-overflow: ellipsis;
 }
 
+.shortenedSelect {
+    max-width: 250px;
+}
+
 .rowInput {
     display: flex;
-    justify-content: space-between;
+    gap: 150px;
 }
 
 @media only screen and (max-width: 921px) {
