@@ -32,6 +32,22 @@ export function getMsg(state, code, x = "", y = "", z = ""){
     return message.replace(/\{0\}/g, x).replace(/\{1\}/g, y).replace(/\{2\}/g, z);
 }
 
+document.querySelectorAll('.shortenedSelect option').forEach((optionElement) => {
+    const curText = optionElement.textContent;
+    optionElement.setAttribute('title', curText);
+
+    // trim multiplier - increase it if the text overflows the input
+    const trimMultiplier = 20;
+
+    const computedStyle = getComputedStyle(optionElement.parentElement);
+    const lengthToShortenTo = Math.round(parseInt(computedStyle.maxWidth, 10) / trimMultiplier);
+
+    // trim if the current text length is more than necessary
+    if (curText.length > lengthToShortenTo) {
+        optionElement.textContent = `${curText.substring(0, lengthToShortenTo)}...`;
+    }
+});
+
 $(function() {
     if ($('.toastMsg').length > 0) {
         setTimeout(function() {

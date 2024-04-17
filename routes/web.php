@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('admin/login', [AuthController::class, 'login'])->name('login');
 Route::post('admin/login', [AuthController::class, 'handleLogin']);
 
-Route::group(['middleware' => ['auth', 'check.route.exists']], function () {
+Route::group(['middleware' => ['auth', 'prevent-back-history', 'check.route.exists']], function () {
     Route::get('admin', [AuthController::class, 'index'])->name('admin');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('admin/error/403', [ErrorController::class, 'deniedPermission'])->name('403');
