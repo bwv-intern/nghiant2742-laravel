@@ -32,7 +32,7 @@ class UserService
         $options = [];
 
         if($lengthOfList === null) return $options;
-        
+
         for ($i = 0; $i < $lengthOfList; $i++) {
             $item = ConstUtil::getContentYml('users', 'user_flg', $i);
             
@@ -46,6 +46,16 @@ class UserService
                 case 'support':
                     $options[] = $checkboxList[2];
                     break;
+            }
+        }
+
+        $userQueryParams = Session::get('userQueryParams');
+        if($userQueryParams){
+            if((count($userQueryParams) >= 1 || $userQueryParams['search']) && !isset($userQueryParams['user_flg'])) {
+                $options = $checkboxList;
+                $options[0]['checked'] = false;
+                $options[1]['checked'] = false;
+                $options[2]['checked'] = false;
             }
         }
 

@@ -31,6 +31,7 @@
                     <x-input.common labelName='Phone' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="phone" id="phone" value="{{ Session::get('userQueryParams')['phone'] ?? '' }}"/>
                     
                 </div>
+                <x-input.common type="hidden" name="search" value="true" />
                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
                     <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom btn col-12 col-lg-2"/>
                     <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom btn col-12 col-lg-2" value="true"/>
