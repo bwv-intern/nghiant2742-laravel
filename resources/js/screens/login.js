@@ -23,7 +23,7 @@ $(function () {
         submitHandler: function (form) {
             $(form).find(':submit').prop('disabled', true).addClass('btnDisabled');
             initOverlay();
-            $(form).trigger("submit");
+            form.submit();
         },
     });
 

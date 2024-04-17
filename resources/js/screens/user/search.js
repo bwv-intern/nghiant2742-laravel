@@ -31,8 +31,7 @@ $(function() {
 
             // init overlay
             initOverlay()
-            // alert('Stop')
-            $form.trigger( "submit" );
+            form.submit();
         }
     });
 
