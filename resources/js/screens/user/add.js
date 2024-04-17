@@ -23,6 +23,9 @@ $(function() {
                 number: ['Phone', 'number'],
                 maxlength: 20
             },
+            date_of_birth: {
+                dateISO: ['Date', 'yyyy-mm-dd']
+            }
         },
         onfocusout: function(element) {
             $(element).valid();
