@@ -39,7 +39,7 @@ $.extend( $.validator, {
 		email: getMsgError('errors', 'E004'),
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
+		dateISO: getMsgError('errors', 'E012', "{0}", "{1}"),
 		number: getMsgError('errors', 'E012', "{0}", "{1}"),
 		digits: "Please enter only digits.",
 		equalTo: getMsgError('errors', 'E011'),

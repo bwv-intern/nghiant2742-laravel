@@ -29,7 +29,7 @@
                     <x-input.common labelName='Phone' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="phone" id="phone" value="{{ old('phone') }}"/>
                 </div>
                 <div class="col-12 rowInput">
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth') }}"/>
+                    <x-input.date labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth') }}"/>
                 </div>
                 <div class="col-12 rowInput">
                     <x-input.textarea labelName='Address' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="textarea" name="address" id="address" value="{{ old('address')}}" rows="4"/>
@@ -41,4 +41,4 @@
         </form>
    </div>
 @stop
-@vite(['resources/js/screens/user/add.js'])
+@vite(['resources/js/screens/user/search-add-edit.js', 'resources/js/screens/user/add.js'])

@@ -6,6 +6,7 @@
 label[id*='-error'] {
     display: block;
     color: red;
+    max-width: 185px;
 }
 
 .required {

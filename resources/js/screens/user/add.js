@@ -23,6 +23,9 @@ $(function() {
                 number: ['Phone', 'number'],
                 maxlength: 20
             },
+            date_of_birth: {
+                dateISO: ['Date', 'yyyy-mm-dd']
+            }
         },
         onfocusout: function(element) {
             $(element).valid();
@@ -36,7 +39,7 @@ $(function() {
         submitHandler: function (form) {
             $(form).find(':submit').prop('disabled', true).addClass('btnDisabled');
             initOverlay();
-            $(form).trigger("submit");
+            form.submit();
         },
     });
 })

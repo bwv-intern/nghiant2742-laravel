@@ -21,8 +21,7 @@
 
                     <x-input.checkbox labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement-checkbox' :options="isCheckedBox(Session::get('userQueryParams')['user_flg'] ?? null)"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
-                    
+                    <x-input.date labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
                 </div>
                 
                 <div class="col-12 col-lg-6">
@@ -108,4 +107,4 @@
     </div>
   </div>
 @stop
-@vite(['resources/js/screens/user/search.js', 'resources/js/screens/user/import.js', 'resources/js/screens/user/export.js'])
+@vite(['resources/js/screens/user/search-add-edit.js', 'resources/js/screens/user/search.js', 'resources/js/screens/user/import.js', 'resources/js/screens/user/export.js'])

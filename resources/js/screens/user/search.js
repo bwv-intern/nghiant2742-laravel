@@ -16,6 +16,9 @@ $(function() {
             phone: {
                 number: ['Phone', 'number']
             },
+            date_of_birth: {
+                dateISO: ['Date', 'yyyy-mm-dd']
+            }
         },
         invalidHandler: function(form, validator) {
             let errors = validator.numberOfInvalids();
@@ -35,8 +38,7 @@ $(function() {
 
             // init overlay
             initOverlay()
-            // alert('Stop')
-            $form.trigger( "submit" );
+            form.submit();
         }
     });
 
