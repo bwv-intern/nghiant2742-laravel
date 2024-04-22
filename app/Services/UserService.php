@@ -154,9 +154,6 @@ class UserService
         if (Session::has('userQueryParams')) {
             $users = $this->userRepository->search($userQueryParams);
             $users = PaginateUtil::paginateModel($users);
-            if (count($userQueryParams) == 1 && isset($userQueryParams['search'])) {
-                $users = [];
-            }
         } else {
             $users = PaginateUtil::paginateModel(new User);
         }
