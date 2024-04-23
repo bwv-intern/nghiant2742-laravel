@@ -47,3 +47,11 @@ document.querySelectorAll('.shortenedSelect option').forEach((optionElement) => 
         optionElement.textContent = `${curText.substring(0, lengthToShortenTo)}...`;
     }
 });
+
+$(function() {
+    if ($('.toastMsg').length > 0) {
+        setTimeout(function() {
+            $('.toastMsg').addClass('d-none');
+        }, 5000);
+    }
+})

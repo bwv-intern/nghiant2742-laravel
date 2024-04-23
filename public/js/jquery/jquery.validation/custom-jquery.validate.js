@@ -39,7 +39,7 @@ $.extend( $.validator, {
 		email: getMsgError('errors', 'E004'),
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
+		dateISO: getMsgError('errors', 'E012', "{0}", "{1}"),
 		number: getMsgError('errors', 'E012', "{0}", "{1}"),
 		digits: "Please enter only digits.",
 		equalTo: getMsgError('errors', 'E011'),
@@ -51,7 +51,9 @@ $.extend( $.validator, {
 		range: $.validator.format( "Please enter a value between {0} and {1}." ),
 		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
 		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
-		step: $.validator.format( "Please enter a multiple of {0}." )
+		step: $.validator.format( "Please enter a multiple of {0}." ),
+		extension: getMsgError('errors', 'E007', 'CSV'),
+		filesize: getMsgError('errors', 'E006', '5MB'),
 
 	},
     methods: {
@@ -276,6 +278,25 @@ $.extend( $.validator, {
 				}
 			}, param ) );
 			return "pending";
+		},
+
+		extension: function( value, element, param ) {
+			param = typeof param === "string" ? param.replace( /,/g, "|" ) : "csv";
+			return this.optional( element ) || value.match( new RegExp( "\\.(" + param + ")$", "i" ) );
+		},
+		filesize: function(value, element, param) {
+			if (element.files.length === 0) {
+				return true;
+			}
+		
+			// Get size of file
+			var fileSize = element.files[0].size;
+		
+			// Convert size to MB
+			var maxSizeKB = parseFloat(param) * 1024;
+		
+			// Validate size of file
+			return this.optional(element) || fileSize <= maxSizeKB;
 		}
 	}
 } );

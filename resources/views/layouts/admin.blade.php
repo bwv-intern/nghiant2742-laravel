@@ -8,6 +8,7 @@
 
         {{-- BS5 --}}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
         @vite(['resources/css/app.css', 'resources/css/layouts/admin.css'])
     </head>
     <body>
@@ -40,6 +41,7 @@
                     @yield('content')
                 </div>
             </div>
+
         </div>
         <div id="overlay">
             <div id="overlay_body">
@@ -48,6 +50,7 @@
         </div>
 
         <script src="{{ asset('js/jquery/3.7.1/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery/jquery.ui/jquery-ui.js') }}"></script>
         <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('js/jquery/jquery.validation/custom-jquery.validate.js') }}"></script>

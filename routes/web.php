@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth', 'prevent-back-history', 'check.route.exis
         Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.edit');
         Route::put('admin/user/{id}', [UserController::class, 'update'])->name('user.update');
         Route::delete('admin/user/{id}', [UserController::class, 'delete'])->name('user.delete');
+        Route::post('users/import', [UserController::class, 'importCSV'])->name('user.import');
     });
 
     Route::group(['middleware' => ['checkRole:0,2']], function () {

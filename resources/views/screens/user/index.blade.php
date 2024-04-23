@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="breadscrumb">
-        <a href="{{ route('admin') }}">Top</a> > 
+        <a class="link" href="{{ route('admin') }}">Top</a> > 
         <a class="breadscrumb-active" disabled="disabled">Users</a>
     </div>
     <div class="wrapper">
@@ -21,8 +21,7 @@
 
                     <x-input.checkbox labelName='User flag' wrapStyle='inputUserElement' labelStyle='labelUserElement' name="user_flg" wrapStyle='inputUserElement' inputStyle='inputUserElement-checkbox' :options="isCheckedBox(Session::get('userQueryParams')['user_flg'] ?? null)"/>
 
-                    <x-input.common labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
-                    
+                    <x-input.date labelName='Date of birth' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="date" name="date_of_birth" id="date_of_birth" value="{{ Session::get('userQueryParams')['date_of_birth'] ?? '' }}"/>
                 </div>
                 
                 <div class="col-12 col-lg-6">
@@ -31,17 +30,19 @@
                     <x-input.common labelName='Phone' wrapStyle='inputUserElement' labelStyle='labelUserElement' type="text" name="phone" id="phone" value="{{ Session::get('userQueryParams')['phone'] ?? '' }}"/>
                     
                 </div>
+                <x-input.common type="hidden" name="search" value="true" />
                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
-                    <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom col-12 col-lg-2"/>
-                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom col-12 col-lg-2" value="true"/>
-                    <a class="btn-custom col-12 text-center col-lg-2" href="{{ route('user.export') }}">Export CSV</a>
+                    <x-button.submit id="btnSearchUser" buttonName="Search" class="btn-custom btn col-12 col-lg-2"/>
+                    <x-button.common id="btnClear" name="clear" buttonName="Clear" class="btn-custom btn col-12 col-lg-2" value="true"/>
+                    <x-button.common id="btnExport" data-target="{{ route('user.export') }}" buttonName="Export CSV" class="btn-custom btn col-12 col-lg-2"/>
+                    <x-button.common buttonName="Import CSV" class="btn-custom col-12 col-lg-2" data-bs-toggle="modal" data-bs-target="#importModal"/>
                 </div>
             </div>
         </form>
    </div>
    @if (count($users)!==0)
 
-            {{ $users->links('components.paginateCustom') }}
+            {{ $users->withQueryString()->links('components.paginateCustom') }}
             {{-- Table of users --}}
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
@@ -64,7 +65,7 @@
                                     <form id="deleteForm_{{ $user['id'] }}" action="{{ route('user.delete', $user['id']) }}" method="post" class="d-inline">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="btn btn-danger deleteBtn" data-id={{ $user['id'] }}>Delete</button>
+                                        <x-button.submit buttonName="Delete" class="btn btn-danger deleteBtn" data-id="{{ $user['id'] }}" />
                                     </form>
                                 </td>
                                 <td scope="row" class="itemTable">{{ $user['email'] }}</td>
@@ -79,5 +80,31 @@
                 </table>
             </div>
     @endif
+   
+<!-- Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Import CSV</h5>
+          <x-button.common buttonName="" data-bs-dismiss="modal" class="btn-close" aria-label="Close"/>
+        </div>
+        <div class="modal-body">
+            <form action="{{ route('user.import') }}" method="post" enctype="multipart/form-data" id="importForm">
+                @csrf
+                <div class="text-left d-flex flex-column">
+                    {{-- <input type="file" name="csv_file" class="" id="customFile"> --}}
+                    <x-input.common type="file" name="csv_file" class="" id="customFile"/>
+                    
+                </div>
+                <div class="modal-footer" style="border-top: none">
+                  <x-button.common buttonName="Close" data-bs-dismiss="modal" class="btn btn-secondary"/>
+                  <x-button.submit buttonName="Submit" class="btn btn-primary"/>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
-@vite(['resources/js/screens/user/search.js'])
+@vite(['resources/js/screens/user/search-add-edit.js', 'resources/js/screens/user/search.js', 'resources/js/screens/user/import.js', 'resources/js/screens/user/export.js'])

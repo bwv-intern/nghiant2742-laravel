@@ -3,9 +3,18 @@
 namespace App\Services;
 
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
+use App\Rules\EmailRule;
+use App\Rules\UserIdExistsRule;
 use App\Utils\ConstUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Utils\MessageUtil;
+use App\Utils\PaginateUtil;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class UserService
 {
@@ -27,7 +36,7 @@ class UserService
         $options = [];
 
         if($lengthOfList === null) return $options;
-        
+
         for ($i = 0; $i < $lengthOfList; $i++) {
             $item = ConstUtil::getContentYml('users', 'user_flg', $i);
             
@@ -41,6 +50,22 @@ class UserService
                 case 'support':
                     $options[] = $checkboxList[2];
                     break;
+            }
+        }
+
+        $userQueryParams = Session::get('userQueryParams');
+        if($userQueryParams){
+            if((count($userQueryParams) >= 1 || $userQueryParams['search']) && !isset($userQueryParams['user_flg'])) {
+                $options = $checkboxList;
+                $options[0]['checked'] = false;
+                $options[1]['checked'] = false;
+                $options[2]['checked'] = false;
+            }
+            if(count($userQueryParams) == 1 && isset($userQueryParams['page'])) {
+                $options = $checkboxList;
+                $options[0]['checked'] = true;
+                $options[1]['checked'] = true;
+                $options[2]['checked'] = true;
             }
         }
 
@@ -73,4 +98,258 @@ class UserService
         $id = $input['id'];
         return $this->userRepository->update('users', $id, $data);
     }
+
+    
+    /**
+     * Validate the structure and content of an input Excel file.
+     *
+     * @param string $file The path to the input Excel file.
+     * @return array An array indicating whether the validation passed or failed,
+     *               along with an associated message.
+     */
+    public function validateInputFile($file) {
+
+        $csvAsArray = array_map('str_getcsv', file($file));
+
+        // Exptected header
+        $expectedHeader = ConstUtil::getContentYml('userFormatCSV','expectedHeaderImport');
+        
+        //Extract the first element from the array
+        $header = $csvAsArray[0];
+
+        // Verify header & expected header
+        $headerMatch = $header === $expectedHeader;
+
+        if (!$headerMatch) {
+            return [
+                'error' => true,
+                'msg' => MessageUtil::getMessage('errors', 'E008')
+            ];
+        }
+        
+        // Check data is not empty
+        if (count($csvAsArray) <= 1) {
+            return [
+                'error' => true,
+                'msg' => 'Your file is empty'
+            ];
+        }
+
+        // Rule Validation
+        $rules = [
+            'user_id' => [
+                'nullable',
+                'numeric',
+                new UserIdExistsRule,
+            ],
+            'email' => [
+                'required',
+                'max:100',
+                new EmailRule,
+            ],
+            'password' => 'required',
+            'user_flag' => 'in:0,1,2|required',
+            'date_of_birth' => 'date_format:Y-m-d',
+            'name' => 'max:50|required',
+        ];
+
+        $customMessages = [
+            'email.required' => MessageUtil::getMessage('errors', 'E001', ['Email']),
+            'email.unique' => MessageUtil::getMessage('errors', 'E009', ['Email']),
+            'name.required' => MessageUtil::getMessage('errors', 'E001', ['Name']),
+            'password.required' => MessageUtil::getMessage('errors', 'E001', ['Password']),
+            'user_flag.required' => MessageUtil::getMessage('errors', 'E001', ['User flag']),
+            'user_id.numeric' => MessageUtil::getMessage('errors', 'E012', ['User ID','number']),
+            'user_flag.in' => MessageUtil::getMessage('errors', 'E012', ['User flag','0, 1 or 2']),
+            'date_of_birth.date_format' => MessageUtil::getMessage('errors', 'E012', ['Date of birth','YYYY-mm-dd']),
+        ];
+        // $rules['email'] = [...$rules['email'], 'unique:users,email,1'];
+        // Re-keying
+        foreach ($csvAsArray as $rowIndex => $row) {
+            if ($rowIndex === 0) {
+                continue; // Skip the header row
+            }
+        
+            $keyedRow = [];
+            for ($columnIndex = 0; $columnIndex < count($expectedHeader); $columnIndex++) {
+                $key = str_replace(' ', '_', strtolower($expectedHeader[$columnIndex]));
+                $keyedRow[$key] = $row[$columnIndex] ?? null;
+            }
+            $csvData[] = $keyedRow;
+        }
+        $listOfEmailInCSV = [];
+        foreach ($csvData as $i => $row) {
+            
+            $customRule = $rules;
+            if (!empty($row['user_id'])) {
+                $customRule['email'] = [...$rules['email'], 'unique:users,email,'.$row['user_id']];
+            } else {
+                $customRule['email'] = [...$rules['email'], 'unique:users,email'];
+            }
+            
+            // Validate the current row using the defined rules
+            $validator = Validator::make($row, $customRule, $customMessages);
+
+            // Check duplicate email in csv file
+            if (in_array($row['email'], $listOfEmailInCSV)) {
+                return [
+                    'error' => true,
+                    'msg' => "Row " . ($i + 2) . ": ". MessageUtil::getMessage('errors', 'E009', ['Email']),
+                ];
+            }
+
+            // Add unique email into array
+            array_push($listOfEmailInCSV, $row['email']);
+
+            if ($validator->fails()) {
+                // Return error message with specific row number
+                return [
+                    'error' => true,
+                    'msg' => "Row " . ($i + 2) . ": ". $validator->errors()->first(),
+                ];
+            }
+        }
+
+        return [
+            'error' => false,
+            'msg' => "File ok",
+            'data' => $csvData
+        ];
+    }
+
+    /**
+     * Handle user queries and retrieve paginated user data
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request containing query parameters
+     * @return \Illuminate\Pagination\LengthAwarePaginator The paginated user data
+     */
+    public function handleUserQuery($request) {
+        // Get user query parameters
+        $userQueryParams = $request->all();
+
+        // Retrieve all users
+        $users = $this->userRepository->getAll();
+
+        // Store user query parameters in session
+        if (!empty($userQueryParams)) {
+            Session::put('userQueryParams', $userQueryParams);
+        } else {
+            Session::forget('userQueryParams');
+        }
+
+        // Retrieve users based on search criteria or paginate all users
+        if (Session::has('userQueryParams')) {
+            $users = $this->userRepository->search($userQueryParams);
+            $users = PaginateUtil::paginateModel($users);
+            if (count($userQueryParams) == 1 && isset($userQueryParams['search'])) {
+                $users = [];
+            }
+        } else {
+            $users = PaginateUtil::paginateModel(new User);
+        }
+        
+        return $users;
+    }
+
+    /**
+     * Handle the creation or updating of user records.
+     *
+     * @param array $data An array containing user data.
+     * @return bool Returns true if user creation/update is successful, otherwise false.
+     */
+    public function import($data) {
+        DB::beginTransaction();
+
+        try {
+            foreach ($data as $key => $row) {
+                $password = $row['password'];
+                $isBcryptHash = preg_match('/^\$2y\$/', $password);
+                if (!$isBcryptHash) {
+                    $password = Hash::make($password); // Hash the password if it's not already hashed.
+                }
+
+                $user = [
+                    'email' => $row['email'],
+                    'password' => $password,
+                    'user_flg' => $row['user_flag'],
+                    'date_of_birth' => $row['date_of_birth'],
+                    'name' => $row['name'],
+                ];
+
+                if (empty($row['user_id'])) {
+                    // Save user with rollback on failure
+                    $this->userRepository->store('users', $user);
+                } else {
+                    // Update user with rollback on failure
+                    $this->userRepository->update('users', $row['user_id'], $user);
+                }
+            }
+
+            DB::commit();
+
+            return true; // User creation/update successful
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            // Handle user creation/update failure (log error, return false)
+            return false;
+        }
+    }
+
+    /**
+     * Export data to a CSV file with specified delimiter and wrap all data inside quotes.
+     *
+     * @param array $data The data to be exported, where each element represents a row of data.
+     * @param string $filename The filename for the exported CSV file.
+     * @param string $delimiter The delimiter to be used in the CSV file (default is comma).
+     * @return void
+     */
+    public function export(array $data, string $filename, string $delimiter = ','): void {
+        $expectedHeader = ConstUtil::getContentYml('userFormatCSV','expectedHeaderExport');
+        $expectedHeaderWithQuotes = [];
+        foreach ($expectedHeader as $row) {
+            $expectedHeaderWithQuotes[] = '"'.$row.'"';
+        }
+
+        $fp = fopen('php://output', 'w');
+
+        // Set headers to force download as CSV
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment;filename=' . $filename);
+        header('Pragma: no-cache');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+
+        // Write header row
+        fputcsv($fp, $expectedHeaderWithQuotes, $delimiter);
+
+        $exception = ["user_id", "date_of_birth", "created_at", "user_flg"];
+        // Write data rows
+        foreach ($data as $row) {
+            $formattedRow = [];
+            foreach ($expectedHeader as $header) {
+                if(!in_array($header, $exception)){
+                    $formattedRow[] = isset($row[$header]) ? '"'.$row[$header].'"' : "";
+                }
+                if($header=="user_id"){
+                    $formattedRow['user_id'] = '"'.$row['id'].'"';
+                }
+                if($header=="user_flg"){
+                    $formattedRow[$header] = '"'.ConstUtil::getContentYml('users','user_flg', $row[$header]).'"';
+                }
+                
+                if($header=="date_of_birth" || $header=="created_at" ){
+                    $formattedRow[$header] = '"'.date("Y/m/d", strtotime($row[$header])).'"';
+                }
+            }
+
+            fputcsv($fp, $formattedRow, $delimiter);
+        }
+
+        fclose($fp);
+
+        exit;
+    }
+
 }

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\ImportRequest;
 use App\Interfaces\UserRepositoryInterface;
-use App\Models\User;
 use App\Utils\MessageUtil;
 use Illuminate\Http\Request;
-use App\Utils\PaginateUtil;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Services\UserService;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller 
 {
@@ -31,32 +30,14 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request) {
-        // Get user query parameters
-        $userQueryParams = $request->all();
-
-        // Retrieve all users
-        $users = $this->userRepository->getAll();
-
         // Check if 'clear' parameter is set to clear session data
-        if (!empty($userQueryParams['clear'])) {
+        $isClear = $request->query('clear');
+        if ($isClear) {
             Session::forget('userQueryParams');
             return redirect()->route('user');
         }
 
-        // Store user query parameters in session
-        if (!empty($userQueryParams)) {
-            Session::put('userQueryParams', $userQueryParams);
-        } else {
-            Session::forget('userQueryParams');
-        }
-
-        // Retrieve users based on search criteria or paginate all users
-        if (Session::has('userQueryParams')) {
-            $users = $this->userRepository->search($userQueryParams);
-            $users = PaginateUtil::paginateModel($users);
-        } else {
-            $users = PaginateUtil::paginateModel(new User);
-        }
+        $users = $this->userService->handleUserQuery($request);
 
         // If no users found, display an info message
         if (count($users) === 0) {
@@ -71,12 +52,25 @@ class UserController extends Controller
     /**
      * Export users data to CSV format.
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @param Request $request
+     * 
      */
-    public function exportCSV() {
+    public function exportCSV(Request $request) {
+
+        $userQueryParams = $request->all();
+        $users = $this->userRepository->search($userQueryParams);
+        $usersEloquent = $users->get();
+        $usersArray = $usersEloquent->toArray();
+
+        // If no users found, display an info message
+        if (count($usersArray) === 0) {
+            $msgInfo = MessageUtil::getMessage('infos', 'I005');
+            return redirect()->route('user', $request->all())->with('msgInfo', $msgInfo);
+        }
+
         $fileName = date('YmdHis') . '_user.csv';
-        return Excel::download(new UsersExport, $fileName);
-    }
+        return $this->userService->export($usersArray, $fileName);
+    }    
 
     /**
      * Show the form for creating a new user.
@@ -157,5 +151,36 @@ class UserController extends Controller
             return redirect()->route('user');
         }
         return redirect()->back()->withErrors("Delete failed");
+    }
+
+    /**
+    * Import users data to CSV format.
+    *
+    * @return \Illuminate\Support\Collection
+    */
+    public function importCSV(ImportRequest $request) 
+    {
+        $file = $request->file('csv_file');
+        $tmpName = $file->getPathname();
+        // Validate ipnut file
+        $result = $this->userService->validateInputFile($tmpName);
+        
+        if ($result['error']) {
+            return redirect()->back()->withErrors(['msg' => $result['msg']]);
+        }
+        
+        // data to create or update
+        $data = $result['data'];
+
+        DB::beginTransaction();
+        
+        try {
+            $this->userService->import($data);
+
+            return redirect()->route('user')->with('msgInfo', MessageUtil::getMessage('infos', 'I013'));
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['msg' => MessageUtil::getMessage('errors', 'E014')]);
+        }
     }
 }
