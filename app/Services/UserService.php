@@ -61,6 +61,12 @@ class UserService
                 $options[1]['checked'] = false;
                 $options[2]['checked'] = false;
             }
+            if(count($userQueryParams) == 1 && isset($userQueryParams['page'])) {
+                $options = $checkboxList;
+                $options[0]['checked'] = true;
+                $options[1]['checked'] = true;
+                $options[2]['checked'] = true;
+            }
         }
 
         return $options;

@@ -42,7 +42,7 @@
    </div>
    @if (count($users)!==0)
 
-            {{ $users->links('components.paginateCustom') }}
+            {{ $users->withQueryString()->links('components.paginateCustom') }}
             {{-- Table of users --}}
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
