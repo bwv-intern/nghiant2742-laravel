@@ -131,7 +131,7 @@ class UserService
         if (count($csvAsArray) <= 1) {
             return [
                 'error' => true,
-                'msg' => 'Your file is empty'
+                'msg' => MessageUtil::getMessage('errors', 'E008')
             ];
         }
 
