@@ -15,7 +15,6 @@ errors:
   E016: "Permission denied."
   E017: "{0} must be less than {1}."
   E018: "Not Found"
-  E019: "Row {0}: {1}"
 
 infos:
   I005: "There is no result."
