@@ -114,6 +114,9 @@ class UserController extends Controller
     public function show(string $id) {
         // Retrieve user by id
         $user = $this->userRepository->getById($id);
+        if(!$user){
+            return redirect()->route('404');
+        }
         return view('screens.user.edit')->with('user', $user);
     }
 
