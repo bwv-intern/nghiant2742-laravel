@@ -106,7 +106,7 @@ class UserService
         $csvAsArray = array_map('str_getcsv', file($file));
 
         // Exptected header
-        $expectedHeader = ["User ID", "Email", "Password", "User Flag", "Date Of Birth", "Name"];
+        $expectedHeader = ConstUtil::getContentYml('userFormatCSV','expectedHeaderImport');
         
         //Extract the first element from the array
         $header = $csvAsArray[0];
@@ -245,8 +245,13 @@ class UserService
         return $users;
     }
 
-    // Implement create new user or update user
-    public function handleCreateOrUpdateUser($data) {
+    /**
+     * Handle the creation or updating of user records.
+     *
+     * @param array $data An array containing user data.
+     * @return bool Returns true if user creation/update is successful, otherwise false.
+     */
+    public function import($data) {
         DB::beginTransaction();
 
         try {
@@ -285,4 +290,60 @@ class UserService
             return false;
         }
     }
+
+    /**
+     * Export data to a CSV file with specified delimiter and wrap all data inside quotes.
+     *
+     * @param array $data The data to be exported, where each element represents a row of data.
+     * @param string $filename The filename for the exported CSV file.
+     * @param string $delimiter The delimiter to be used in the CSV file (default is comma).
+     * @return void
+     */
+    public function export(array $data, string $filename, string $delimiter = ','): void {
+        $expectedHeader = ConstUtil::getContentYml('userFormatCSV','expectedHeaderExport');
+        $expectedHeaderWithQuotes = [];
+        foreach ($expectedHeader as $row) {
+            $expectedHeaderWithQuotes[] = '"'.$row.'"';
+        }
+
+        $fp = fopen('php://output', 'w');
+
+        // Set headers to force download as CSV
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment;filename=' . $filename);
+        header('Pragma: no-cache');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+
+        // Write header row
+        fputcsv($fp, $expectedHeaderWithQuotes, $delimiter);
+
+        $exception = ["user_id", "date_of_birth", "created_at", "user_flg"];
+        // Write data rows
+        foreach ($data as $row) {
+            $formattedRow = [];
+            foreach ($expectedHeader as $header) {
+                if(!in_array($header, $exception)){
+                    $formattedRow[] = isset($row[$header]) ? '"'.$row[$header].'"' : "";
+                }
+                if($header=="user_id"){
+                    $formattedRow['user_id'] = '"'.$row['id'].'"';
+                }
+                if($header=="user_flg"){
+                    $formattedRow[$header] = '"'.ConstUtil::getContentYml('users','user_flg', $row[$header]).'"';
+                }
+                
+                if($header=="date_of_birth" || $header=="created_at" ){
+                    $formattedRow[$header] = '"'.date("Y/m/d", strtotime($row[$header])).'"';
+                }
+            }
+
+            fputcsv($fp, $formattedRow, $delimiter);
+        }
+
+        fclose($fp);
+
+        exit;
+    }
+
 }

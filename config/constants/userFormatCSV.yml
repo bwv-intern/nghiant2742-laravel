@@ -1,0 +1,19 @@
+expectedHeaderImport:
+  - User ID
+  - Email
+  - Password
+  - User Flag
+  - Date Of Birth
+  - Name
+
+expectedHeaderExport:
+  - user_id
+  - email
+  - name
+  - user_flg
+  - date_of_birth
+  - phone
+  - address
+  - del_flg
+  - created_by
+  - created_at

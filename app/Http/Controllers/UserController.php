@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\ImportRequest;
-use App\Imports\UsersImport;
 use App\Interfaces\UserRepositoryInterface;
 use App\Utils\MessageUtil;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Validators\ValidationException;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -57,19 +53,24 @@ class UserController extends Controller
      * Export users data to CSV format.
      *
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 
      */
     public function exportCSV(Request $request) {
-        $users = $this->userService->handleUserQuery($request);
+
+        $userQueryParams = $request->all();
+        $users = $this->userRepository->search($userQueryParams);
+        $usersEloquent = $users->get();
+        $usersArray = $usersEloquent->toArray();
+
         // If no users found, display an info message
-        if (count($users) === 0) {
+        if (count($usersArray) === 0) {
             $msgInfo = MessageUtil::getMessage('infos', 'I005');
             return redirect()->route('user', $request->all())->with('msgInfo', $msgInfo);
         }
 
         $fileName = date('YmdHis') . '_user.csv';
-        return Excel::download(new UsersExport, $fileName);
-    }
+        return $this->userService->export($usersArray, $fileName);
+    }    
 
     /**
      * Show the form for creating a new user.
@@ -171,8 +172,8 @@ class UserController extends Controller
         DB::beginTransaction();
         
         try {
-            $this->userService->handleCreateOrUpdateUser($data);
-            DB::rollback();
+            $this->userService->import($data);
+
             return redirect()->route('user')->with('msgInfo', MessageUtil::getMessage('infos', 'I013'));
         } catch (Exception $e) {
             DB::rollback();

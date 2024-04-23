@@ -12,7 +12,7 @@ class ConstUtil
      * @param string $table
      * @param string $field
      * @param string $key
-     * @return string|null
+     * @return array|string|null
      */
     public static function getContentYml($table, $field, $key = null)
     {
