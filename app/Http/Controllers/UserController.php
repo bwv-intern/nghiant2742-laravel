@@ -14,6 +14,8 @@ use Maatwebsite\Excel\Validators\ValidationException;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\UserService;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller 
 {
@@ -155,28 +157,26 @@ class UserController extends Controller
     public function importCSV(ImportRequest $request) 
     {
         $file = $request->file('csv_file');
-        $result = $this->userService->validateInputFile($file);
+        $tmpName = $file->getPathname();
+        // Validate ipnut file
+        $result = $this->userService->validateInputFile($tmpName);
         
         if ($result['error']) {
             return redirect()->back()->withErrors(['msg' => $result['msg']]);
         }
         
+        // data to create or update
+        $data = $result['data'];
+
+        DB::beginTransaction();
+        
         try {
-
-            Excel::import(new UsersImport, $file);
-
+            $this->userService->handleCreateOrUpdateUser($data);
+            DB::rollback();
             return redirect()->route('user')->with('msgInfo', MessageUtil::getMessage('infos', 'I013'));
-        } catch (ValidationException $e) {
-            $failures = $e->failures();
-            
-            foreach ($failures as $failure) {
-                // row that went wrong
-                $row = $failure->row();
-                $msgError = $failure->errors()[0];
-            }
-
-            return redirect()->back()->withErrors(['msg' => MessageUtil::getMessage('errors', 'E019', [$row, $msgError])]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['msg' => MessageUtil::getMessage('errors', 'E014')]);
         }
-
     }
 }
